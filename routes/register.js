@@ -1,3 +1,3 @@
 exports.index=function(req,res){
-    console.log(req,res,arguments);
+    res.render('register');
 }
