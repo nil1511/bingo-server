@@ -43,7 +43,6 @@ app.post('/register',function(req,res){
     var pass = req.body.pass;
     var email = req.body.email;
     connection.query("INSERT INTO `users`(`name`, `email`, `password`) VALUES ('"+name+"','"+email+"','"+pass+"')",function(err,rows,fields){
-        console.log(err,rows,fields,err.code);
         var successres={"code":2,"message":"you are successfully Registered"};
         if(err==null)
         res.end(JSON.stringify(successres));
