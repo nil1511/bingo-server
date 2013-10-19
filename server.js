@@ -38,16 +38,24 @@ if ('development' == app.get('env')) {
 app.get('/', routes.index);
 app.get('/users', user.list);
 app.get('/register', register.index);
-app.post('/register',function(data){
-    var name = data.body.name;
-    var pass = data.body.pass;
-    var email = data.body.email;
-    connection.query("INSERT INTO `users`(`name`, `email`, `password`) VALUES ('"+name+"','"+email+"','"+pass+"')",function(){
-    console.log(arguments);
+app.post('/register',function(req,res){
+    var name = req.body.name;
+    var pass = req.body.pass;
+    var email = req.body.email;
+    connection.query("INSERT INTO `users`(`name`, `email`, `password`) VALUES ('"+name+"','"+email+"','"+pass+"')",function(err,rows,fields){
+        console.log(err,rows,fields,err.code);
+        var successres={"code":2,"message":"you are successfully Registered"};
+        if(err==null)
+        res.end(JSON.stringify(successres));
+        else if(err.code=='ER_DUP_ENTRY'){
+        res.end(JSON.stringify({"code":1,"message":"selected user name already exist"}))
+        }
+        else{
+        res.end(JSON.stringify({"code":0,"message":"We are unable to process your request"}))
+        }
     });
     console.log(name,pass,email);
 });
-
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));

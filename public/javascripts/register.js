@@ -9,8 +9,9 @@ $(function(){
             return;
         }
         console.log($('#name'),$('#pass1'),$('#pass2'),$('#email'));
-        $.post('/register',{name:name,pass:pass,email:email},function(d){
-            console.log(d);
+        $.post('/register',{name:name,pass:pass,email:email},function(data){
+            data=JSON.parse(data);
+            console.log(data);
         })
     });
 })
