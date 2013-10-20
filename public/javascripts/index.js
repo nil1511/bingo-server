@@ -48,9 +48,14 @@ $(function() {
                 type:"POST",
                 data:{"name":username,"password":$.md5(password)},
                 url:'/login'
-            }).done(function(e){
-                $('#password').val('');
-                console.log(e);
+            }).done(function(res){
+                if(res==1){
+                    $('#password').val('');
+                    window.location.href='/bingo';
+                }
+                else{
+                    console.log("Username password incorrect");
+                }
             })
         }
     })

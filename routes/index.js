@@ -6,6 +6,6 @@
 exports.index = function(req, res){
   res.render('index', { title: 'Bingo' });
 };
-exports.game = function(req,res){
-    res.render('game');
+exports.bingo = function(req,res){
+    res.render('bingo');
 }
