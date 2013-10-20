@@ -5,7 +5,6 @@
 var express = require('express');
 var routes = require('./routes');
 var user = require('./routes/user');
-var register = require('./routes/register')
 var http = require('http');
 var path = require('path');
 var mysql = require('mysql');
@@ -37,7 +36,8 @@ if ('development' == app.get('env')) {
 
 app.get('/', routes.index);
 app.get('/users', user.list);
-app.get('/register', register.index);
+app.get('/register',routes.register);
+app.get('/game',routes.game);
 app.post('/register',function(req,res){
     var name = req.body.name;
     var pass = req.body.pass;
