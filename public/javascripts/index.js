@@ -22,6 +22,7 @@ $(function() {
                     data=JSON.parse(data);
                     if(data.code==2)
                         {
+                            $('.register > input').val('')
                             $('#username').val(name);
                             $('#submit').trigger('click');
                         }
@@ -40,8 +41,17 @@ $(function() {
         }
         var username=$('#username').val(),password=$("#password").val();
         if(username=='' || password ==''){
-            console.log("fe")
             return false;
+        }
+        else{
+            $.ajax({
+                type:"POST",
+                data:{"name":username,"password":$.md5(password)},
+                url:'/login'
+            }).done(function(e){
+                $('#password').val('');
+                console.log(e);
+            })
         }
     })
     $('#ruser').blur(function(){

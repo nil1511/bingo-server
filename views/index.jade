@@ -3,7 +3,8 @@ extends layout
 block content
     .header.nav-header
         h1= title
-        ul.menu
+        //-
+            ul.menu
             li#home
                 a(href="/") home
             li#register
@@ -29,5 +30,5 @@ block content
                     input.form-control#email(type="email",placeholder="email address")
                 .form-group
                     .col-lg-12
-                    button.btn.btn-default#submit(type="submit") Sign in
+                    button.btn.btn-default#submit(type="button") Sign in
                     button.col-md-offset-1.btn.btn-default#register(type="button") Register

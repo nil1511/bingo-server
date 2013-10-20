@@ -61,7 +61,14 @@ app.post('/checkusername',function(req,res){
         res.end(rows.length.toString());
     })
 })
-
+app.post('/login',function(req,res){
+    var name = req.body.name;
+    var pass = req.body.password;
+    connection.query("SELECT `name` FROM `users` WHERE `name`='"+name+"' AND `password`='"+pass+"'",function(err,rows,fields){
+        console.log(err,rows,fields);
+        res.end(rows.length.toString());
+    })
+})
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });
