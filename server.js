@@ -35,7 +35,6 @@ if ('development' == app.get('env')) {
 
 app.get('/', routes.index);
 app.get('/users', user.list);
-app.get('/register',routes.register);
 app.get('/game',routes.game);
 app.post('/register',function(req,res){
     var name = req.body.name;
