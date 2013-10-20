@@ -12,7 +12,6 @@ var connection = mysql.createConnection({
     host:'localhost',
     user:'root',
     password:'',
-    debug:'true',
     database:'bingo'
 });
 connection.connect();
@@ -55,6 +54,13 @@ app.post('/register',function(req,res){
     });
     console.log(name,pass,email);
 });
+app.post('/checkusername',function(req,res){
+    var name = req.body.name;
+    connection.query("SELECT `name` FROM `users` WHERE `name`='"+name+"'",function(err,rows,fields){
+        console.log(err,rows,fields);
+        res.end(rows.length.toString());
+    })
+})
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));

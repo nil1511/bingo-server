@@ -12,15 +12,22 @@ block content
                 a(href="#login") login
     .container
         p Welcome to #{title}
-        form(role="form")
-            .form-group
-                label.col-lg-2.control-label(for="inputusername") username
-                .col-lg-10
+        #login.col-xs-5.col-md-3.pull-right
+            form(role="form")
+                .form-group.login
                     input.form-control#username(type="text",placeholder="username")
-            .form-group
-                label.col-lg-2.control-label(for="password") password
-                .col-lg-10
+                .form-group.login
                     input.form-control#password(type="password",placeholder="password")
-            .form-group
-                .col-lg-offset-2.col-lg-10
-                button.btn.btn-default(type="submit") SignIn
+                .form-group.register
+                    label.control-label
+                    input.form-control#ruser(type="text",placeholder="username")
+                .form-group.register
+                    input.form-control#pass1(type="password",placeholder="password")
+                .form-group.register
+                    input.form-control#pass2(type="password",placeholder="retype password")
+                .form-group.register
+                    input.form-control#email(type="email",placeholder="email address")
+                .form-group
+                    .col-lg-12
+                    button.btn.btn-default#submit(type="submit") Sign in
+                    button.col-md-offset-1.btn.btn-default#register(type="button") Register
