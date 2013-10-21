@@ -5,7 +5,8 @@ block content
         table.table.table-bordered
             -for(var i=0;i<25;i++){
                -if(i%5==0){
-                tr
+                tr(id="row#{i/5+1}")
                -}
-                    td #{number[i]}
+                   td.num(id="cell#{i+1}")
+                    b #{number[i]}
             -}
