@@ -15,8 +15,12 @@ var connection = mysql.createConnection({
     database:'bingo'
 });
 connection.connect();
-var app = express();
-
+//var app = express();
+//var io = require('socket.io').listen(app);
+var app = express()
+    ,http = require('http')
+    ,server = http.createServer(app)
+    ,io = require('socket.io').listen(server);
 // all environments
 app.set('port', process.env.PORT || 3000);
 app.set('views', __dirname + '/views');
@@ -79,10 +83,17 @@ function checksession(req,res,next){
     if(req.session.user_id)
         next();
     else{
-        res.send('Please Login');
+        res.render('index', { title: 'Bingo',page:'index' });
     }
 }
 app.get('/bingo',checksession,routes.bingo);
-http.createServer(app).listen(app.get('port'), function(){
-  console.log('Express server listening on port ' + app.get('port'));
-});
+//http.createServer(app).listen(app.get('port'), function(){
+  //console.log('Express server listening on port ' + app.get('port'));
+//});
+
+io.sockets.on('connection',function(socket){
+  socket.emit('news', { hello: 'world' });
+    console.log("welcome")
+})
+server.listen(3000);
+

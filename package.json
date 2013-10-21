@@ -8,7 +8,12 @@
   "dependencies": {
     "express": "3.4.0",
     "mysql": "*",
-    "mongodb":"*",
+    "mongodb": "*",
+    "socket.io": "*",
     "jade": "*"
+  },
+  "subdomain": "bingo",
+  "engines": {
+    "node": "0.10.x"
   }
 }

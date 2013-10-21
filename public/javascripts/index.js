@@ -32,6 +32,10 @@ $(function() {
             }
        }
     })
+    $('#password').keydown(function(e){
+        if(e.keyCode==13)
+            $('#submit').trigger('click');
+    })
     $(document).on('click','#submit',function(e){
         if(!$('.login').is(':visible')){
             $('.register').fadeOut('fast',function(){
