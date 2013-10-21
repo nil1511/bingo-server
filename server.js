@@ -80,7 +80,7 @@ app.post('/login',function(req,res){
     })
 })
 function checksession(req,res,next){
-    if(req.session.user_id)
+    if(req.session.user_id||true)
         next();
     else{
         res.render('index', { title: 'Bingo',page:'index' });
@@ -91,9 +91,46 @@ app.get('/bingo',checksession,routes.bingo);
   //console.log('Express server listening on port ' + app.get('port'));
 //});
 
+var num=0;
+var updatetimeStamp=new Date();
+var seed=true;
+var ttu=5;//time to update
 io.sockets.on('connection',function(socket){
-  socket.emit('news', { hello: 'world' });
+    if(seed){
+    seed=false;
+    var seeder= setInterval(ne,ttu*1000);
+    console.log("Created Timer");
+    }
+   function ne(){
+    //var num = randomSeeder(1,100);
+    var min=1,max=100;
+    if(num==0||(updatetimeStamp.getSeconds()-new Date().getSeconds())%ttu==0){
+        updatetimeStamp=new Date();
+        num = Math.floor(Math.random()*max+min);
+        socket.emit('no', { code: num });
+        console.log((updatetimeStamp.getSeconds()-new Date().getSeconds())%ttu,updatetimeStamp.getSeconds(),new Date().getSeconds());
+    }
+    socket.broadcast.emit('no', { code: num });
+   }
     console.log("welcome")
 })
+function numemitter(){
+        var num = randomSeeder(1,100);
+        socket.emit('no', { code: num });
+}
+//Should return same number to all the clients
+function randomSeeder(min,max){
+    console.log('s');
+    if(num==0||(updatetimeStamp.getSeconds()-new Date().getSeconds())%3==0){
+        updatetimeStamp=new Date();
+        num = Math.floor(Math.random()*max+min);
+        console.log(updatetimeStamp.getSeconds()-new Date().getSeconds()%3,updatetimeStamp.getSeconds(),new Date().getSeconds());
+    }
+   //else{
+        //clearInterval(seeder);
+        //setInterval(numemitter,3000);
+    //}
+    return num;
+}
 server.listen(3000);
 

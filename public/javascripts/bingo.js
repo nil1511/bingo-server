@@ -6,8 +6,9 @@ $(function(){
         $(this).css('background',colors[colorstart++%colors.length])
     })
     var socket = io.connect('http://127.0.0.1:3000');
-    socket.on('news',function(){
-        console.log(arguments);
+    socket.on('no',function(num){
+        //console.log(num.code,arguments);
+        $('#generator').html(num.code)
     })
 
 
