@@ -5,4 +5,10 @@ $(function(){
         if($(this).css('background-color')=='rgba(0, 0, 0, 0)')
         $(this).css('background',colors[colorstart++%colors.length])
     })
+    var socket = io.connect('http://127.0.0.1:3000');
+    socket.on('news',function(){
+        console.log(arguments);
+    })
+
+
 });

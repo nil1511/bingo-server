@@ -5,6 +5,9 @@ html
     link(rel='stylesheet', href='/stylesheets/normalize.css')
     link(rel='stylesheet', href='/stylesheets/bootstrap.css')
     link(rel='stylesheet', href='/stylesheets/#{page}.css')
+   -if(page=='bingo'){
+    script(type='text/javascript', src="/socket.io/socket.io.js")
+   -}
     script(type='text/javascript', src='/javascripts/jquery-2.0.3.js')
     script(type='text/javascript', src='/javascripts/jquery.md5.js')
     script(type='text/javascript', src='/javascripts/#{page}.js')
