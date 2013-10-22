@@ -95,6 +95,7 @@ var num=0;
 var updatetimeStamp=new Date();
 var seed=true;
 var ttu=5;//time to update
+var numobj={};
 io.sockets.on('connection',function(socket){
     if(seed){
     seed=false;
@@ -102,11 +103,21 @@ io.sockets.on('connection',function(socket){
     console.log("Created Timer");
     }
    function ne(){
-    //var num = randomSeeder(1,100);
     var min=1,max=100;
     if(num==0||(updatetimeStamp.getSeconds()-new Date().getSeconds())%ttu==0){
         updatetimeStamp=new Date();
+        if(num==0)
+        var b = num;
         num = Math.floor(Math.random()*max+min);
+        if(typeof b!= 'undefined'&& b==0){
+            numobj[num]=1
+        }
+        while(numobj[num]==1)
+        {
+            console.log(num,numobj);
+           num = Math.floor(Math.random()*max+min);
+        }
+        numobj[num]=1;
         socket.emit('no', { code: num });
         console.log((updatetimeStamp.getSeconds()-new Date().getSeconds())%ttu,updatetimeStamp.getSeconds(),new Date().getSeconds());
     }
@@ -114,23 +125,4 @@ io.sockets.on('connection',function(socket){
    }
     console.log("welcome")
 })
-function numemitter(){
-        var num = randomSeeder(1,100);
-        socket.emit('no', { code: num });
-}
-//Should return same number to all the clients
-function randomSeeder(min,max){
-    console.log('s');
-    if(num==0||(updatetimeStamp.getSeconds()-new Date().getSeconds())%3==0){
-        updatetimeStamp=new Date();
-        num = Math.floor(Math.random()*max+min);
-        console.log(updatetimeStamp.getSeconds()-new Date().getSeconds()%3,updatetimeStamp.getSeconds(),new Date().getSeconds());
-    }
-   //else{
-        //clearInterval(seeder);
-        //setInterval(numemitter,3000);
-    //}
-    return num;
-}
 server.listen(3000);
-
