@@ -32,7 +32,7 @@ $(function() {
             }
        }
     })
-    $('#password').keydown(function(e){
+    $('.login input').keydown(function(e){
         if(e.keyCode==13)
             $('#submit').trigger('click');
     })
@@ -44,7 +44,12 @@ $(function() {
            return false;
         }
         var username=$('#username').val(),password=$("#password").val();
-        if(username=='' || password ==''){
+        if(username==''){
+            $('#username').parent('.form-group').removeClass('has-success').addClass('has-error');
+            return false;
+        }
+        else if(password==''){
+            $('#password').parent('.form-group').removeClass('has-success').addClass('has-error');
             return false;
         }
         else{
@@ -58,6 +63,7 @@ $(function() {
                     window.location.href='/bingo';
                 }
                 else{
+                    $('#loginlabel').css('color','#b94a48').html('Username or password incorrect');
                     console.log("Username password incorrect");
                 }
             })
