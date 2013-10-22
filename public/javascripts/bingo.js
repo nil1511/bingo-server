@@ -9,11 +9,36 @@ $(function(){
         numobj[$(this).attr('id').split('cell')[1]]=$(this).children('b').html();
         if($(this).css('background-color')=='rgba(0, 0, 0, 0)')
         $(this).css('background',colors[colorstart++%colors.length])
-    console.log($(this),numobj);
+         console.log($(this),numobj);
     })
     var socket = io.connect('http://127.0.0.1:3000');
     socket.on('no',function(num){
-       console.log(num.code,arguments);
+       //console.log(num.code,arguments);
         $('#generator').html(num.code)
+    })
+    socket.on('result',function(data){
+        console.log(data);
+    })
+    $(document).on('click','.clams',function(){
+        switch ($(this).attr('id')) {
+            case 'uh':
+                console.log("uh");
+                for(var i=1;i<=15;i++){
+                    if(numobj[i]==null&& false)
+                        return false;
+                }
+                console.log('I am Claming');
+                socket.emit('clam',{clams:$(this).attr('id'),num:numobj})
+                break;
+            case 'lh':
+                console.log('lh');
+                break;
+            case 'fh':
+               console.log('fh')
+                break;
+
+            default:
+
+        }
     })
 });

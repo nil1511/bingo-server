@@ -5,9 +5,17 @@
 var express = require('express');
 var routes = require('./routes');
 var user = require('./routes/user');
+var users= require('./users');
 var http = require('http');
 var path = require('path');
 var mysql = require('mysql');
+//var mongo = require('mongodb').MongoClient;
+//mongo.connect("mongodb://localhost:27017/bingo",function(err,db){
+    //if(!err)
+        //console.log('DB connected');
+    //db.collection('bingo',function(err,collection){
+    //})
+//})
 var connection = mysql.createConnection({
     host:'localhost',
     user:'root',
@@ -78,8 +86,10 @@ app.post('/login',function(req,res){
     })
 })
 function checksession(req,res,next){
-    if(req.session.user_id||true)
+    if(req.session.user_id){
+        users.AddUser(req.session.user_id);
         next();
+    }
     else{
         res.render('index', { title: 'Bingo',page:'index' });
     }
@@ -93,14 +103,15 @@ var ttu=5;//time to update
 var numobj={};
 var seeder;
 io.sockets.on('connection',function(socket){
+
     if(seed){
     seed=false;
     seeder= setInterval(ne,ttu*1000);
     console.log("Created Timer");
     }
-   function ne(){
+    function ne(){
     var min=1,max=100;
-    if(num==0||(updatetimeStamp.getSeconds()-new Date().getSeconds())%ttu==0){
+    if(num==0||(updatetimeStamp.getSeconds()-new Date().getSeconds())%ttu==0) {
         updatetimeStamp=new Date();
         if(num==0)
         var b = num;
@@ -118,13 +129,16 @@ io.sockets.on('connection',function(socket){
         console.log((updatetimeStamp.getSeconds()-new Date().getSeconds())%ttu,updatetimeStamp.getSeconds(),new Date().getSeconds());
     }
     socket.broadcast.emit('no', { code: num });
-   }
+    }
+    socket.emit('no', { code: num });
     console.log("welcome",Object.keys(io.connected).length,numobj)
     socket.on('disconnect',socketdisconnect);
+    socket.on('clam',function(socket){
+        claming(socket);
+    })
 })
-function socketdisconnect(s){
+function socketdisconnect(){
     var a=io.sockets.clients();
-    //io.sockets.emit(a);
     if(Object.keys(io.connected).length==1){
         clearInterval(seeder);
         seed= true;
@@ -133,5 +147,7 @@ function socketdisconnect(s){
     }
     console.log("disconnected",Object.keys(io.connected).length,numobj);
 }
-
+function claming(s) {
+    console.log(s);
+}
 server.listen(3000);
