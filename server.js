@@ -96,10 +96,11 @@ var updatetimeStamp=new Date();
 var seed=true;
 var ttu=5;//time to update
 var numobj={};
+var seeder;
 io.sockets.on('connection',function(socket){
     if(seed){
     seed=false;
-    var seeder= setInterval(ne,ttu*1000);
+    seeder= setInterval(ne,ttu*1000);
     console.log("Created Timer");
     }
    function ne(){
@@ -123,6 +124,18 @@ io.sockets.on('connection',function(socket){
     }
     socket.broadcast.emit('no', { code: num });
    }
-    console.log("welcome")
+    console.log("welcome",Object.keys(io.connected).length,numobj)
+    socket.on('disconnect',socketdisconnect);
 })
+function socketdisconnect(s){
+    var a=io.sockets.clients();
+    //io.sockets.emit(a);
+    if(Object.keys(io.connected).length==1){
+        clearInterval(seeder);
+        seed= true;
+        num=0;
+        console.log("Cleared Interval");
+    }
+    console.log("disconnected",Object.keys(io.connected).length,numobj);
+}
 server.listen(3000);
