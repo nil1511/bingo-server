@@ -1,18 +1,57 @@
 extends layout
 block content
-    .container
-    .col-md-2
-        p#generator 00
-    .col-md-2
-        table.table.table-bordered
-            -for(var i=0;i<25;i++){
-               -if(i%5==0){
-                tr(id="row#{i/5+1}")
-               -}
-                   td.num(id="cell#{i+1}")
-                    b #{number[i]}
-            -}
-    .col-md-2#clambuttons
-        button.btn.btn-danger.clams#uh(type='button') Upper House
-        button.btn.btn-danger.clams#lh(type='button') lower house
-        button.btn.btn-danger.clams#fh(type='button') full house
+    .container.game
+        .col-md-2
+            p#generator 00
+        .col-md-2
+            table.table.table-bordered
+                -for(var i=0;i<25;i++){
+                   -if(i%5==0){
+                    tr(id="row#{i/5+1}")
+                   -}
+                       td.num(id="cell#{i+1}")
+                        b #{number[i]}
+                -}
+        .col-md-2#clambuttons
+            button.btn.btn-danger.clams#uh(type='button') Upper House
+            button.btn.btn-danger.clams#lh(type='button') lower house
+            button.btn.btn-danger.clams#fh(type='button') full house
+        .chat.col-md-6
+            .chatbox may be chat can come here
+
+    .container.help
+        .col-md-3
+            table.table.table-bordered
+                -for(var i=0;i<25;i++){
+                -if(i%5==0){
+                tr
+                -}
+                    -if(i<15){
+                    td.sel #{i+1}
+                    -}
+                    -else{
+                    td #{i+1}
+                -}}
+            p upperhouse
+        .col-md-3
+            table.table.table-bordered
+                -for(var i=0;i<25;i++){
+                -if(i%5==0){
+                tr
+                -}
+                    td.sel #{i+1}
+                -}
+            p fullhouse
+        .col-md-3
+            table.table.table-bordered
+                -for(var i=0;i<25;i++){
+                -if(i%5==0){
+                tr
+                -}
+                -if(i>9){
+                    td.sel #{i+1}
+                -}
+                -else{
+                    td #{i+1}
+                -}}
+            p lowerhouse

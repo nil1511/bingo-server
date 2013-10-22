@@ -18,3 +18,12 @@ td.num{
 #clambuttons{
     text-align:center;
 }
+.sel{
+    background-color:green;
+}
+.chatbox{
+    height:100%;
+}
+.help{
+    text-align:center;
+}
