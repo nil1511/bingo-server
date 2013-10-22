@@ -1,15 +1,15 @@
 {
   "name": "Bingo",
-  "version": "0.0.1",
+  "version": "0.0.1-3",
   "private": true,
   "scripts": {
-    "start": "node app.js"
+    "start": "node server.js"
   },
   "dependencies": {
     "express": "3.4.0",
-    "mysql": "*",
-    "mongodb": "*",
     "socket.io": "*",
+    "mysql" : "*",
+    "mongodb" : "*",
     "jade": "*"
   },
   "subdomain": "bingo",

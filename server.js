@@ -15,8 +15,6 @@ var connection = mysql.createConnection({
     database:'bingo'
 });
 connection.connect();
-//var app = express();
-//var io = require('socket.io').listen(app);
 var app = express()
     ,http = require('http')
     ,server = http.createServer(app)
@@ -87,9 +85,6 @@ function checksession(req,res,next){
     }
 }
 app.get('/bingo',checksession,routes.bingo);
-//http.createServer(app).listen(app.get('port'), function(){
-  //console.log('Express server listening on port ' + app.get('port'));
-//});
 
 var num=0;
 var updatetimeStamp=new Date();
@@ -138,4 +133,5 @@ function socketdisconnect(s){
     }
     console.log("disconnected",Object.keys(io.connected).length,numobj);
 }
+
 server.listen(3000);
