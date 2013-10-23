@@ -87,44 +87,47 @@ app.get('/bingo',checksession,routes.bingo);
 var num=0;
 var updatetimeStamp=new Date();
 var seed=true;
-var ttu=5;//time to update
-var numobj={};
+var ttu=0.5;//time to update
+var numlist=[];
 var seeder;
 io.sockets.on('connection',function(socket){
-
     if(seed){
     seed=false;
+    prepareNumlist();
     seeder= setInterval(ne,ttu*1000);
     console.log("Created Timer");
     }
     function ne(){
-    var min=1,max=100;
-    if(num==0||(updatetimeStamp.getSeconds()-new Date().getSeconds())%ttu==0) {
+    var min=1,max=numlist.length;
+    if((updatetimeStamp.getSeconds()-new Date().getSeconds())%ttu==0) {
         updatetimeStamp=new Date();
-        if(num==0)
-        var b = num;
-        num = Math.floor(Math.random()*max+min);
-        if(typeof b!= 'undefined'&& b==0){
-            numobj[num]=1
+        if(numlist.length==0){
+            console.log("Game over");
+            num=99;
+            io.sockets.emit('game',{status:"game_over"});
+            seed=true;
+            clearInterval(seeder);
+            return;
         }
-        while(numobj[num]==1)
-        {
-            console.log(num,numobj);
-           num = Math.floor(Math.random()*max+min);
-        }
-        numobj[num]=1;
-        socket.emit('no', { code: num });
+        var ran = Math.floor(Math.random()*max+min)-1;
+        num = numlist[ran];
+        console.log(num,ran,numlist);
+        numlist.splice(ran,1);
+        io.sockets.emit('no', { code: num });
         console.log((updatetimeStamp.getSeconds()-new Date().getSeconds())%ttu,updatetimeStamp.getSeconds(),new Date().getSeconds());
+        }
     }
-    socket.broadcast.emit('no', { code: num });
-    }
-    socket.emit('no', { code: num });
-    console.log("welcome",Object.keys(io.connected).length,numobj)
+    console.log("welcome",Object.keys(io.connected).length,numlist)
     socket.on('disconnect',socketdisconnect);
     socket.on('clam',function(socket){
         claming(socket);
     })
 })
+function prepareNumlist(){
+    for(var i=1;i<=100;i++){
+        numlist[i-1]=i;
+    }
+}
 io.set('authorization',function(data,accept){
     console.log(data,accept);
     accept(null,true);
@@ -134,10 +137,9 @@ function socketdisconnect(){
     if(Object.keys(io.connected).length==1){
         clearInterval(seeder);
         seed= true;
-        num=0;
         console.log("Cleared Interval");
     }
-    console.log("disconnected",Object.keys(io.connected).length,numobj);
+    console.log("disconnected",Object.keys(io.connected).length,numlist);
 }
 function claming(s) {
     console.log(s);

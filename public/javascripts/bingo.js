@@ -13,11 +13,19 @@ $(function(){
     })
     var socket = io.connect('http://127.0.0.1:3000');
     socket.on('no',function(num){
-       //console.log(num.code,arguments);
+       console.log(num.code,arguments);
         $('#generator').html(num.code)
     })
     socket.on('result',function(data){
         console.log(data);
+    })
+    socket.on('game',function(data){
+        console.log(data);
+        if(data.status=="game_over")
+            alert('Game Over');
+    })
+    socket.on('message',function(d){
+        console.log(d);
     })
     $(document).on('click','.clams',function(){
         switch ($(this).attr('id')) {
