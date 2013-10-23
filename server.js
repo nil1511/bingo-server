@@ -4,25 +4,10 @@
 
 var express = require('express');
 var routes = require('./routes');
-var user = require('./routes/user');
-var users= require('./users');
+var users= require('./modules/users');
 var http = require('http');
 var path = require('path');
-var mysql = require('mysql');
-//var mongo = require('mongodb').MongoClient;
-//mongo.connect("mongodb://localhost:27017/bingo",function(err,db){
-    //if(!err)
-        //console.log('DB connected');
-    //db.collection('bingo',function(err,collection){
-    //})
-//})
-var connection = mysql.createConnection({
-    host:'localhost',
-    user:'root',
-    password:'',
-    database:'bingo'
-});
-connection.connect();
+var ApplicationDB = require('./modules/db').ApplicationDB;
 var app = express()
     ,http = require('http')
     ,server = http.createServer(app)
@@ -45,52 +30,56 @@ app.use(express.static(path.join(__dirname, 'public')));
 if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
-
+var db = new ApplicationDB('localhost',27017,'bingo')
 app.get('/', routes.index);
-app.get('/users', user.list);
 app.post('/register',function(req,res){
     var name = req.body.name;
     var pass = req.body.pass;
     var email = req.body.email;
-    connection.query("INSERT INTO `users`(`name`, `email`, `password`) VALUES ('"+name+"','"+email+"','"+pass+"')",function(err,rows,fields){
+    db.save({"name":name,"password":pass,"email":email},function(err,doc){
         var successres={"code":2,"message":"you are successfully Registered"};
-        if(err==null)
-        res.end(JSON.stringify(successres));
-        else if(err.code=='ER_DUP_ENTRY'){
+       if(err){
         res.end(JSON.stringify({"code":1,"message":"selected user name already exist"}))
+        console.log(err);
         }
         else{
-        res.end(JSON.stringify({"code":0,"message":"We are unable to process your request"}))
+        res.end(JSON.stringify(successres));
         }
     });
     console.log(name,pass,email);
 });
 app.post('/checkusername',function(req,res){
     var name = req.body.name;
-    connection.query("SELECT `name` FROM `users` WHERE `name`='"+name+"'",function(err,rows,fields){
-        console.log(err,rows,fields);
-        res.end(rows.length.toString());
+    db.findOne({"name":name},function(err,result){
+        console.log(err,result);
+        if(result==null)
+            res.end('0');
+        else
+            res.end('1')
     })
 })
 app.post('/login',function(req,res){
     var name = req.body.name;
     var pass = req.body.password;
-    connection.query("SELECT `id` FROM `users` WHERE `name`='"+name+"' AND `password`='"+pass+"'",function(err,rows,fields){
-        if(rows.length==0){
+    db.findOne({"name":name,"password":pass},function(err,result){
+        console.log(err,result);
+        if(result==null){
             res.end('0');
-            return;
         }
-        req.session.user_id=rows[0].id;
-        console.log(err,rows,fields,req.session,req);
-        res.end(rows.length.toString());
+        else{
+            req.session.user_id=result._id;
+            res.end('1')
+        }
     })
 })
 function checksession(req,res,next){
     if(req.session.user_id){
         users.AddUser(req.session.user_id);
         next();
+        console.log('Inside checksession');
     }
     else{
+        //next()
         res.render('index', { title: 'Bingo',page:'index' });
     }
 }
@@ -136,6 +125,10 @@ io.sockets.on('connection',function(socket){
     socket.on('clam',function(socket){
         claming(socket);
     })
+})
+io.set('authorization',function(data,accept){
+    console.log(data,accept);
+    accept(null,true);
 })
 function socketdisconnect(){
     var a=io.sockets.clients();

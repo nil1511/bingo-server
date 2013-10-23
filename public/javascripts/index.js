@@ -76,6 +76,11 @@ $(function() {
                 $('#ruser').parent('.form-group').removeClass('has-success').addClass('has-error');
             return;
         }
+        else{
+                $('#ruser').prev('.control-label').removeAttr('for').html('')
+                $('#ruser').parent('.form-group').removeClass('has-error').addClass('has-success');
+
+        }
         $.ajax({
             type:"POST",
             url:"/checkusername",
