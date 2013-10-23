@@ -4,10 +4,26 @@ var Server = require('mongodb').Server;
 var BSON = require('mongodb').BSON;
 var ObjectID = require('mongodb').ObjectID;
 
-ApplicationDB = function(host,port,dbname){
+ApplicationDB = function(host,port,user,password,dbname){
     this.db = new Db(dbname,new Server(host,port,{"safe":"false"},{"auto_reconnect":"true"}))
-    this.db.open(function(){})
-}
+    this.db.open(function(err,db1){
+        if(db1){
+            if(user)
+            db1.authenticate(user,password,function(err,data){
+                if(data){
+                    console.log("DB opened");
+                }
+                else{
+                    console.log("Error in auth",err);
+                }
+            })
+        }
+        else{
+            console.log("Error opening db",err);
+        }
+
+    })
+   }
 
 ApplicationDB.prototype.getCollection = function(callback){
     this.db.collection('bingo',function(err,bingo_collection){

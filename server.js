@@ -30,7 +30,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
-var db = new ApplicationDB('localhost',27017,'bingo')
+var db = new ApplicationDB('localhost',27017,'','','bingo')
 app.get('/', routes.index);
 app.post('/register',function(req,res){
     var name = req.body.name;
@@ -79,7 +79,6 @@ function checksession(req,res,next){
         console.log('Inside checksession');
     }
     else{
-        //next()
         res.render('index', { title: 'Bingo',page:'index' });
     }
 }
