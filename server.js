@@ -30,7 +30,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
-//var db = new ApplicationDB('paulo.mongohq.com',10099,'nodejitsu','dfe4b2c329cc079231ce74c7237f615a','nodejitsudb8322450453')
 var db = new ApplicationDB('localhost',27017,'','','bingo')
 
 app.get('/', routes.index);
@@ -101,9 +100,6 @@ io.sockets.on('connection',function(socket){
     }
     function ne(){
     var min=1,max=numlist.length;
-    //console.log("Inside function ne",updatetimeStamp.getSeconds(),new Date().getSeconds(),(updatetimeStamp.getSeconds()-new Date().getSeconds())%ttu);
-    //if((updatetimeStamp.getSeconds()-new Date().getSeconds())%ttu==0){
-        //updatetimeStamp=new Date();
         if(numlist.length==0){
             console.log("Game over");
             num=99;
@@ -114,11 +110,8 @@ io.sockets.on('connection',function(socket){
         }
         var ran = Math.floor(Math.random()*max+min)-1;
         num = numlist[ran];
-        //console.log(num,ran,numlist);
         numlist.splice(ran,1);
         io.sockets.emit('no', { code: num });
-        //console.log((updatetimeStamp.getSeconds()-new Date().getSeconds())%ttu,updatetimeStamp.getSeconds(),new Date().getSeconds());
-        //}
     }
     socket.emit('no', { code: num });
     console.log("welcome",Object.keys(io.connected).length)
