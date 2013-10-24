@@ -40,6 +40,9 @@ $(function(){
         console.log(data);
         if(data.status=="game_over")
             alert('Game Over');
+        if(data.status=="running"){
+            $('.clams').attr('disabled','true');
+        }
     })
     socket.on('message',function(d){
         console.log(d);

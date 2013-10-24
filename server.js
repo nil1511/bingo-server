@@ -182,6 +182,7 @@ function claming(data,socket,session) {i
         console.log("Finding Winners Name");
         io.sockets.emit('result',{clam:data.clams,name:row.name})
     })
+    socket.emit('game',{status:"running"});
     console.log('Clam ' +data.clams+' has been won');
     //console.log(data,socket,session);
 }
