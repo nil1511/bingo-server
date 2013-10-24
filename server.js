@@ -31,6 +31,7 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 var db = new ApplicationDB('localhost',27017,'','','bingo')
+
 app.get('/', routes.index);
 app.post('/register',function(req,res){
     var name = req.body.name;
@@ -87,7 +88,7 @@ app.get('/bingo',checksession,routes.bingo);
 var num=0;
 var updatetimeStamp=new Date();
 var seed=true;
-var ttu=0.5;//time to update
+var ttu=5;//time to update
 var numlist=[];
 var seeder;
 io.sockets.on('connection',function(socket){
@@ -99,8 +100,9 @@ io.sockets.on('connection',function(socket){
     }
     function ne(){
     var min=1,max=numlist.length;
-    if((updatetimeStamp.getSeconds()-new Date().getSeconds())%ttu==0) {
-        updatetimeStamp=new Date();
+    //console.log("Inside function ne",updatetimeStamp.getSeconds(),new Date().getSeconds(),(updatetimeStamp.getSeconds()-new Date().getSeconds())%ttu);
+    //if((updatetimeStamp.getSeconds()-new Date().getSeconds())%ttu==0){
+        //updatetimeStamp=new Date();
         if(numlist.length==0){
             console.log("Game over");
             num=99;
@@ -111,13 +113,14 @@ io.sockets.on('connection',function(socket){
         }
         var ran = Math.floor(Math.random()*max+min)-1;
         num = numlist[ran];
-        console.log(num,ran,numlist);
+        //console.log(num,ran,numlist);
         numlist.splice(ran,1);
         io.sockets.emit('no', { code: num });
-        console.log((updatetimeStamp.getSeconds()-new Date().getSeconds())%ttu,updatetimeStamp.getSeconds(),new Date().getSeconds());
-        }
+        //console.log((updatetimeStamp.getSeconds()-new Date().getSeconds())%ttu,updatetimeStamp.getSeconds(),new Date().getSeconds());
+        //}
     }
-    console.log("welcome",Object.keys(io.connected).length,numlist)
+    socket.emit('no', { code: num });
+    console.log("welcome",Object.keys(io.connected).length)
     socket.on('disconnect',socketdisconnect);
     socket.on('clam',function(socket){
         claming(socket);
@@ -127,6 +130,7 @@ function prepareNumlist(){
     for(var i=1;i<=100;i++){
         numlist[i-1]=i;
     }
+    return;
 }
 io.set('authorization',function(data,accept){
     console.log(data,accept);

@@ -62,6 +62,7 @@ ApplicationDB.prototype.save=function(data,callback){
                 element.created = new Date();
             }
             bingo_collection.insert(data,function(){
+                console.log("Inserting data in DB",data);
                 callback(null,data)
             })
         }

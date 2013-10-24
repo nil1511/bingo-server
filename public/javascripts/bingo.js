@@ -11,6 +11,7 @@ $(function(){
         $(this).css('background',colors[colorstart++%colors.length])
          console.log($(this),numobj);
     })
+    //var socket = io.connect('http://bingo.nodejitsu.com');
     var socket = io.connect('http://127.0.0.1:3000');
     socket.on('no',function(num){
        console.log(num.code,arguments);
