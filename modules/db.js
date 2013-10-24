@@ -3,7 +3,7 @@ var Connection = require('mongodb').Connection;
 var Server = require('mongodb').Server;
 var BSON = require('mongodb').BSON;
 var ObjectID = require('mongodb').ObjectID;
-
+exports.ObjectID=ObjectID
 ApplicationDB = function(host,port,user,password,dbname){
     this.db = new Db(dbname,new Server(host,port,{"safe":"false"},{"auto_reconnect":"true"}))
     this.db.open(function(err,db1){
@@ -68,4 +68,21 @@ ApplicationDB.prototype.save=function(data,callback){
         }
     })
 }
+//ApplicationDB.prototype.findByObjectID = function(data,collection){
+    //console.log(data);
+    //this.getCollection(function(err,bingo_collection){
+        //if(err)
+            //callback(err);
+        //else{
+            //var newdata= {_id:new ObjectId(data._id)}
+            //bingo_collection.findOne(newdata,function(err,result){
+                //if(err)
+                    //callback(err)
+                //else
+                    //callback(null,result);
+
+            //})
+        //}
+    //})
+//}
 exports.ApplicationDB = ApplicationDB;

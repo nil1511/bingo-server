@@ -13,15 +13,23 @@ $(function(){
     })
     //var socket = io.connect('http://bingo.nodejitsu.com');
     var socket = io.connect('http://127.0.0.1:3000');
+    var localnums=[];
+    var myNum ;
+    socket.on('welcome',function(data){
+        console.log(data);
+        myNum= data.yourNum;
+    })
     socket.on('no',function(num){
        console.log(num.code,arguments);
         $('#generator').html(num.code)
+        for(var i=0;i<25;i++){
+            if(myNum[i]==num.code)
+                $('#cell'+(i+1)).trigger('click');
+        }
+        localnums.push(num.code);
     })
     socket.on('result',function(data){
         console.log(data);
-        if(data.disablebtn){
-            $('#'+data.disablebtn).attr('disabled','true')
-        }
     })
     socket.on('game',function(data){
         console.log(data);
@@ -30,6 +38,10 @@ $(function(){
     })
     socket.on('message',function(d){
         console.log(d);
+    });
+    socket.on('disableBtn',function(data){
+        console.log(data);
+        $('#'+data.btn).attr('disabled','true');
     })
     $(document).on('click','.clams',function(){
         switch ($(this).attr('id')) {

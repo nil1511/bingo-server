@@ -7,7 +7,8 @@ var routes = require('./routes');
 var users= require('./modules/users');
 var http = require('http');
 var path = require('path');
-var ApplicationDB = require('./modules/db').ApplicationDB;
+var DB = require('./modules/db'),
+    ApplicationDB = DB.ApplicationDB;
 var cookieParser=express.cookieParser('hXZe!l*loserce%');
 var connect = require('connect'),
     sessionStore = new connect.middleware.session.MemoryStore();
@@ -35,7 +36,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
-//var db = new ApplicationDB('paulo.mongohq.com',10099,'nodejitsu','dfe4b2c329cc079231ce74c7237f615a','nodejitsudb8322450453')
 var db = new ApplicationDB('localhost',27017,'','','bingo')
 
 app.get('/', routes.index);
@@ -91,22 +91,26 @@ function checksession(req,res,next){
 }
 app.get('/bingo',checksession,routes.bingo);
 
-var num=0;
+var maximum =50;
+var sentNums = [];
+var num=Math.floor(Math.random()*maximum+1);
+sentNums.push(num);
 var updatetimeStamp=new Date();
 var seed=true;
-var ttu=5;//time to update
+var ttu=0.5;//time to update
 var numlist=[];
 var seeder;
+var uh,fh,lh;
 sessionSockets.on('connection',function(err,socket,session){
     console.log("Printing session");
     if(typeof session=="undefined")
         return;
         console.log(users.getNum(session.user_id));
         users.setSocket(session.user_id,socket.id)
-    //console.log(session,session.user_id);
+    console.log(session,session.user_id);
     if(seed){
     seed=false;
-    prepareNumlist();
+    prepareNumlist(num,maximum);
     seeder= setInterval(ne,ttu*1000);
     console.log("Created Timer");
     }
@@ -114,7 +118,6 @@ sessionSockets.on('connection',function(err,socket,session){
     var min=1,max=numlist.length;
         if(numlist.length==0){
             console.log("Game over");
-            num=99;
             io.sockets.emit('game',{status:"game_over"});
             seed=true;
             clearInterval(seeder);
@@ -123,19 +126,22 @@ sessionSockets.on('connection',function(err,socket,session){
         var ran = Math.floor(Math.random()*max+min)-1;
         num = numlist[ran];
         numlist.splice(ran,1);
+        sentNums.push(ran);
         io.sockets.emit('no', { code: num });
     }
+    socket.emit('welcome',{previousNums:sentNums,yourNum:users.getNum(session.user_id)});
     socket.emit('no', { code: num });
     //console.log("welcome",Object.keys(io.connected).length)
     socket.on('disconnect',socketdisconnect);
-    socket.on('clam',function(socket){
-        claming(socket);
+    socket.on('clam',function(data){
+        claming(data,socket,session);
     })
 })
-function prepareNumlist(){
-    for(var i=1;i<=100;i++){
+function prepareNumlist(num,maximum){
+    for(var i=1;i<=maximum;i++){
         numlist[i-1]=i;
     }
+    numlist.splice(num,1);
     return;
 }
 function socketdisconnect(){
@@ -147,7 +153,26 @@ function socketdisconnect(){
     }
     //console.log("disconnected",Object.keys(io.connected).length,numlist);
 }
-function claming(s) {
-    console.log(s);
+function claming(data,socket,session) {
+    var locallist = data.num;
+    var obj = sentNums.slice(0);
+    for(var i =0;i<locallist.length;i++){
+        for(var j=0;j<obj.length;j++){
+            if(obj[j]==locallist[i])
+                continue;
+        }
+        if(j==obj.length){
+            console.log("False Clams");
+            return false;
+        }
+    }
+    io.sockets.emit('disableBtn',{btn:data.clams});
+    console.log(session);
+    db.findOne({_id: DB.ObjectID(session.user_id)},function(err,row){
+        console.log("Finding Winners Name");
+        io.sockets.emit('result',{calm:data.clams,name:row.name})
+    })
+    console.log('Clam ' +data.clams+' has been won');
+    //console.log(data,socket,session);
 }
 server.listen(3000);
