@@ -94,7 +94,6 @@ app.get('/bingo',checksession,routes.bingo);
 var maximum =50;
 var sentNums = [];
 var num=Math.floor(Math.random()*maximum+1);
-sentNums.push(num);
 var updatetimeStamp=new Date();
 var seed=true;
 var ttu=0.5;//time to update
@@ -126,7 +125,7 @@ sessionSockets.on('connection',function(err,socket,session){
         var ran = Math.floor(Math.random()*max+min)-1;
         num = numlist[ran];
         numlist.splice(ran,1);
-        sentNums.push(ran);
+        sentNums.push(num);
         io.sockets.emit('no', { code: num });
     }
     socket.emit('welcome',{previousNums:sentNums,yourNum:users.getNum(session.user_id)});
@@ -138,10 +137,12 @@ sessionSockets.on('connection',function(err,socket,session){
     })
 })
 function prepareNumlist(num,maximum){
+    sentNums = [];
     for(var i=1;i<=maximum;i++){
         numlist[i-1]=i;
     }
     numlist.splice(num,1);
+    sentNums.push(num);
     return;
 }
 function socketdisconnect(){
@@ -153,24 +154,33 @@ function socketdisconnect(){
     }
     //console.log("disconnected",Object.keys(io.connected).length,numlist);
 }
-function claming(data,socket,session) {
+var checklist = {'uh':15,'fh':25,'lh':25},initial={'lh':11,'uh':0,'fh':0};
+//Disabled count Check counts = {'uh':15,'lh':15,'fh':25};
+function claming(data,socket,session) {i
+    var count=0;
     var locallist = data.num;
     var obj = sentNums.slice(0);
-    for(var i =0;i<locallist.length;i++){
+    console.log(locallist);
+    if(locallist.length==0||obj.length==0||checklist[data.clams]>locallist.length)
+        return false;
+    for(var i=initial[data.clams];i<locallist.length && i<checklist[data.clams];i++){
         for(var j=0;j<obj.length;j++){
-            if(obj[j]==locallist[i])
-                continue;
+            if(obj[j]==locallist[i]){
+                //count++;
+                break
+            }
         }
+        console.log(j+" After for loop")
         if(j==obj.length){
             console.log("False Clams");
             return false;
         }
     }
     io.sockets.emit('disableBtn',{btn:data.clams});
-    console.log(session);
+    //console.log(session);
     db.findOne({_id: DB.ObjectID(session.user_id)},function(err,row){
         console.log("Finding Winners Name");
-        io.sockets.emit('result',{calm:data.clams,name:row.name})
+        io.sockets.emit('result',{clam:data.clams,name:row.name})
     })
     console.log('Clam ' +data.clams+' has been won');
     //console.log(data,socket,session);

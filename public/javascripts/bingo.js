@@ -1,15 +1,18 @@
 $(function(){
     var colors = ['#E67E22','#E74C3C','#7F8C8D','#8E44AD','#2980B9','#27AE60','#F39C12','#1ABC9C'];
     var colorstart = Math.floor(Math.random()*colors.length);
-    var numobj={};
+    var numobj=[];
     $('.num').click(function(e){
-        console.log($(this).children('b').html(),$(this));
+        console.log($(this).children('b').html());
         if($(this).children('b').html()!=$('#generator').html())
             return false;
-        numobj[$(this).attr('id').split('cell')[1]]=$(this).children('b').html();
+        var idno = parseInt($(this).attr('id').split('cell')[1]);
+        --idno;
+        console.log(idno);
+        numobj[idno]=parseInt($(this).children('b').html());
         if($(this).css('background-color')=='rgba(0, 0, 0, 0)')
         $(this).css('background',colors[colorstart++%colors.length])
-         console.log($(this),numobj);
+         console.log(numobj);
     })
     //var socket = io.connect('http://bingo.nodejitsu.com');
     var socket = io.connect('http://127.0.0.1:3000');
@@ -20,7 +23,7 @@ $(function(){
         myNum= data.yourNum;
     })
     socket.on('no',function(num){
-       console.log(num.code,arguments);
+       //console.log(num.code,arguments);
         $('#generator').html(num.code)
         for(var i=0;i<25;i++){
             if(myNum[i]==num.code)
@@ -29,7 +32,9 @@ $(function(){
         localnums.push(num.code);
     })
     socket.on('result',function(data){
-        console.log(data);
+        if(data.clam)
+            $('#'+data.clam+'name').html(data.name);
+        console.log(data.clam,data.name);
     })
     socket.on('game',function(data){
         console.log(data);
@@ -47,8 +52,8 @@ $(function(){
         switch ($(this).attr('id')) {
             case 'uh':
                 console.log("uh");
-                for(var i=1;i<=15;i++){
-                    if(numobj[i]==null&& false)
+                for(var i=0;i<15;i++){
+                    if(numobj[i]==null)
                         return false;
                 }
                 console.log('I am Claming uh');
@@ -56,17 +61,17 @@ $(function(){
                 break;
             case 'lh':
                 console.log('lh');
-                for(var i=25;i>=11;i--){
-                    if(numobj[i]==null&& false)
+                for(var i=10;i<25;i++){
+                    if(numobj[i]==null)
                         return false;
                 }
-                console.log('I am Claming');
+                console.log('I am Claming lh');
                 socket.emit('clam',{clams:$(this).attr('id'),num:numobj})
                 break;
             case 'fh':
                 console.log('fh')
-                for(var i=1;i<=25;i++){
-                    if(numobj[i]==null&& false)
+                for(var i=0;i<25;i++){
+                    if(numobj[i]==null)
                         return false;
                 }
                 console.log('I am Claming full house');
