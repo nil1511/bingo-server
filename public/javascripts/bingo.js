@@ -19,6 +19,9 @@ $(function(){
     })
     socket.on('result',function(data){
         console.log(data);
+        if(data.disablebtn){
+            $('#'+data.disablebtn).attr('disabled','true')
+        }
     })
     socket.on('game',function(data){
         console.log(data);
@@ -36,16 +39,27 @@ $(function(){
                     if(numobj[i]==null&& false)
                         return false;
                 }
-                console.log('I am Claming');
+                console.log('I am Claming uh');
                 socket.emit('clam',{clams:$(this).attr('id'),num:numobj})
                 break;
             case 'lh':
                 console.log('lh');
+                for(var i=25;i>=11;i--){
+                    if(numobj[i]==null&& false)
+                        return false;
+                }
+                console.log('I am Claming');
+                socket.emit('clam',{clams:$(this).attr('id'),num:numobj})
                 break;
             case 'fh':
-               console.log('fh')
+                console.log('fh')
+                for(var i=1;i<=25;i++){
+                    if(numobj[i]==null&& false)
+                        return false;
+                }
+                console.log('I am Claming full house');
+                socket.emit('clam',{clams:$(this).attr('id'),num:numobj})
                 break;
-
             default:
 
         }
