@@ -8,10 +8,15 @@ var users= require('./modules/users');
 var http = require('http');
 var path = require('path');
 var ApplicationDB = require('./modules/db').ApplicationDB;
+var cookieParser=express.cookieParser('hXZe!l*loserce%');
+var connect = require('connect'),
+    sessionStore = new connect.middleware.session.MemoryStore();
 var app = express()
     ,http = require('http')
     ,server = http.createServer(app)
-    ,io = require('socket.io').listen(server);
+    ,io = require('socket.io').listen(server)
+    ,SessionSockets = require('session.socket.io')
+    ,sessionSockets = new SessionSockets(io, sessionStore, cookieParser);
 // all environments
 app.set('port', process.env.PORT || 3000);
 app.set('views', __dirname + '/views');
@@ -21,8 +26,8 @@ app.use(express.logger('dev'));
 app.use(express.compress());
 app.use(express.bodyParser());
 app.use(express.methodOverride());
-app.use(express.cookieParser('hXZe!l*loserce%'));
-app.use(express.cookieSession());
+app.use(cookieParser);
+app.use(express.session({store: sessionStore}));
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -91,7 +96,13 @@ var seed=true;
 var ttu=5;//time to update
 var numlist=[];
 var seeder;
-io.sockets.on('connection',function(socket){
+sessionSockets.on('connection',function(err,socket,session){
+    console.log("Printing session");
+    if(typeof session=="undefined")
+        return;
+        console.log(users.getNum(session.user_id));
+        users.setSocket(session.user_id,socket.id)
+    //console.log(session,session.user_id);
     if(seed){
     seed=false;
     prepareNumlist();
@@ -114,7 +125,7 @@ io.sockets.on('connection',function(socket){
         io.sockets.emit('no', { code: num });
     }
     socket.emit('no', { code: num });
-    console.log("welcome",Object.keys(io.connected).length)
+    //console.log("welcome",Object.keys(io.connected).length)
     socket.on('disconnect',socketdisconnect);
     socket.on('clam',function(socket){
         claming(socket);
@@ -126,10 +137,6 @@ function prepareNumlist(){
     }
     return;
 }
-io.set('authorization',function(data,accept){
-    console.log(data,accept);
-    accept(null,true);
-})
 function socketdisconnect(){
     var a=io.sockets.clients();
     if(Object.keys(io.connected).length==1){
@@ -137,7 +144,7 @@ function socketdisconnect(){
         seed= true;
         console.log("Cleared Interval");
     }
-    console.log("disconnected",Object.keys(io.connected).length,numlist);
+    //console.log("disconnected",Object.keys(io.connected).length,numlist);
 }
 function claming(s) {
     console.log(s);
