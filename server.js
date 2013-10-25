@@ -91,12 +91,12 @@ function checksession(req,res,next){
 }
 app.get('/bingo',checksession,routes.bingo);
 
-var maximum =50;
+var maximum =100;
 var sentNums = [];
 var num=Math.floor(Math.random()*maximum+1);
 var updatetimeStamp=new Date();
 var seed=true;
-var ttu=5;//time to update
+var ttu=0.5;//time to update
 var numlist=[];
 var seeder;
 var uh,fh,lh;
@@ -110,6 +110,7 @@ sessionSockets.on('connection',function(err,socket,session){
     if(seed){
     seed=false;
     prepareNumlist(num,maximum);
+    console.log(numlist,sentNums);
     seeder= setInterval(ne,ttu*1000);
     console.log("Created Timer");
     }
@@ -119,6 +120,7 @@ sessionSockets.on('connection',function(err,socket,session){
             console.log("Game over");
             io.sockets.emit('game',{status:"game_over"});
             seed=true;
+            console.log(numlist,sentNums);
             clearInterval(seeder);
             return;
         }
@@ -126,6 +128,7 @@ sessionSockets.on('connection',function(err,socket,session){
         num = numlist[ran];
         numlist.splice(ran,1);
         sentNums.push(num);
+        console.log(sentNums.length);
         io.sockets.emit('no', { code: num });
     }
     socket.emit('welcome',{previousNums:sentNums,yourNum:users.getNum(session.user_id)});
@@ -141,7 +144,7 @@ function prepareNumlist(num,maximum){
     for(var i=1;i<=maximum;i++){
         numlist[i-1]=i;
     }
-    numlist.splice(num,1);
+    numlist.splice(num-1,1);
     sentNums.push(num);
     return;
 }
