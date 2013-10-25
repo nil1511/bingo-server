@@ -1,6 +1,4 @@
 $(function(){
-    var colors = ['#E67E22','#E74C3C','#7F8C8D','#8E44AD','#2980B9','#27AE60','#F39C12','#1ABC9C'];
-    var colorstart = Math.floor(Math.random()*colors.length);
     var numobj=[];
     var previousNum=[0,0];
     var previousClamable= true;
@@ -35,7 +33,7 @@ $(function(){
         console.log(idno);
         numobj[idno]=parseInt(clickNum);
         if($(cell).css('background-color')=='rgba(0, 0, 0, 0)')
-        $(cell).css('background',colors[colorstart++%colors.length])
+        $(cell).css('background-color','rgb(41, 128, 185)')
          console.log(numobj);
     }
     var socket = io.connect();
@@ -46,7 +44,7 @@ $(function(){
         console.log(data);
         myNum= data.yourNum;
         previousNums=data.previousNums;
-        console.log($('#previousdeclaredNum').html());
+        //console.log($('#previousdeclaredNum').html());
         $('#previousdeclaredNum').html(previousNums[0])
         if(data.game){
         for(var i=1;i<previousNums.length;i++){
@@ -55,11 +53,13 @@ $(function(){
         setTimeout(function(){
             previousClamable=false;
             $('#previousdeclaredNum').css('color','red');
-        },20000);}
+        },20000);
+        $('#allNum').html($('#previousdeclaredNum').html())
+        }
         else{
             $("#previousdeclaredNum").html("Sorry,Game is Over")
         }
-        showNum(data.code)
+        showNum(data);
     })
     $('#letsplay').click(function(){
         if($(this).hasClass('btn-danger'))
@@ -100,10 +100,18 @@ return {h:hh,m:mm,s:ss}
     }
     socket.on('no',showNum)
     function showNum(num){
-       //console.log(num.code,arguments);
+        //console.log(num.code,arguments);
         previousNum[0]=previousNum[1];
         previousNum[1]=parseInt($('#generator').html())
         $('#pre').html(previousNum[0]+","+previousNum[1])
+        if($('#allNum').html()=='')
+            $('#allNum').html(num.code);
+        else{
+            var cstring = $('#allNum').html();
+            var nu = cstring.substring(1+cstring.lastIndexOf(','));
+            if(nu!=num.code)
+            $('#allNum').html($('#allNum').html()+","+num.code);
+        }
         $('#generator').html(num.code)
         //for(var i=0;i<25;i++){
             //if(myNum[i]==num.code)
