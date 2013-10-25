@@ -27,7 +27,7 @@ td.num{
 .help{
     text-align:center;
 }
-#previousdeclaredNum{
+#previousdeclaredNum,#allNum{
     word-wrap: break-word;
 }
 .instruction{

@@ -95,12 +95,13 @@ function checksession(req,res,next){
 app.get('/bingo',checksession,routes.bingo);
 
 var maximum =100;
-var StartTime =new Date(2013,9,25,16,50,0,0);
+var StartTime =new Date(2013,9,25,18,30,0,0);
+//var StartTime =new Date;
 var sentNums = [];
 var num=Math.floor(Math.random()*maximum+1);
 var updatetimeStamp=new Date();
 var seed=true;
-var ttu=10;//time to update
+var ttu=15;//time to update
 var numlist=[];
 var seeder;
 var uh,fh,lh;
@@ -113,7 +114,8 @@ function ne(){
         if(numlist.length==0){
             console.log("Game over");
             io.sockets.emit('game',{status:"game_over"});
-            //seed=true;
+            seed=true;
+            StartTime =new Date(new Date().getTime()+(5*60*1000));
             gamerunning=false;
             console.log(numlist,sentNums);
             clearInterval(seeder);
@@ -123,12 +125,12 @@ function ne(){
         num = numlist[ran];
         numlist.splice(ran,1);
         sentNums.push(num);
-        console.log(sentNums.length);
+        //console.log(sentNums.length);
         io.sockets.emit('no', { code: num });
     }
 }
 sessionSockets.on('connection',function(err,socket,session){
-    //console.log(StartTime,new Date()> StartTime);
+    console.log(StartTime,new Date()> StartTime);
     console.log("Printing session");
     if(typeof session=="undefined"){
         console.log("Session Undefined");
@@ -136,7 +138,7 @@ sessionSockets.on('connection',function(err,socket,session){
         return;
     }
     if(new Date()<StartTime){
-        socket.emit('starttime',{time:StartTime});
+        socket.emit('starttime',{time:StartTime,stime:new Date()});
     }else{
         socket.emit('welcome',{previousNums:sentNums,yourNum:users.getNum(session.user_id),code:num,game:gamerunning});
     }
@@ -149,7 +151,9 @@ sessionSockets.on('connection',function(err,socket,session){
     //console.log("welcome",socket.id)
     socket.on('startgame',function(){
         if(seed){
+            console.log("Startgame");
             connectionSetup();
+            io.sockets.emit('gamestarted')
         }
         if(new Date()> StartTime){
         socket.emit('welcome',{previousNums:sentNums,yourNum:users.getNum(session.user_id),code:num,game:gamerunning});

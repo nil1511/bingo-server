@@ -32,7 +32,7 @@ $(function(){
         --idno;
         console.log(idno);
         numobj[idno]=parseInt(clickNum);
-        if($(cell).css('background-color')=='rgba(0, 0, 0, 0)')
+        //if($(cell).css('background-color')=='')
         $(cell).css('background-color','rgb(41, 128, 185)')
          console.log(numobj);
     }
@@ -47,13 +47,14 @@ $(function(){
         //console.log($('#previousdeclaredNum').html());
         $('#previousdeclaredNum').html(previousNums[0])
         if(data.game){
+            $('.prenums').html('Numbers Declared when you were not online you have '+(previousNums.length*5) +' seconds to fill them');
         for(var i=1;i<previousNums.length;i++){
             $('#previousdeclaredNum').html($('#previousdeclaredNum').html()+","+previousNums[i])
         }
         setTimeout(function(){
             previousClamable=false;
             $('#previousdeclaredNum').css('color','red');
-        },20000);
+        },5000*previousNums.length);
         $('#allNum').html($('#previousdeclaredNum').html())
         }
         else{
@@ -65,6 +66,10 @@ $(function(){
         if($(this).hasClass('btn-danger'))
             return;
         socket.emit('startgame');
+        //$('.instruction').hide();
+        //$('.game').show();
+   })
+   socket.on('gamestarted',function(){
         $('.instruction').hide();
         $('.game').show();
    })
@@ -72,9 +77,11 @@ $(function(){
         if(data.time){
             $('.game').hide();
             $('.instruction').show();
+         var ctime=new Date(data.stime);
+
        var timer=setInterval(function(){
                 var time =new Date(data.time);
-                var ctime=new Date();
+                ctime=new Date(ctime.getTime()+1000);
                 var tt= stoh(time-ctime);
                 if(tt.h<0){
                     $('#time').html('You can Start Playing');
