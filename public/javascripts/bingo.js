@@ -38,7 +38,7 @@ $(function(){
     }
     var socket = io.connect();
     var localnums=[];
-    var myNum ;
+    var myNum=[] ;
     var previousNums=[];
     socket.on('welcome',function(data){
         console.log(data);
@@ -46,15 +46,22 @@ $(function(){
         previousNums=data.previousNums;
         console.log($('#previousdeclaredNum').html());
         $('#previousdeclaredNum').html(previousNums[0])
+        if(data.game){
         for(var i=1;i<previousNums.length;i++){
             $('#previousdeclaredNum').html($('#previousdeclaredNum').html()+","+previousNums[i])
         }
         setTimeout(function(){
             previousClamable=false;
             $('#previousdeclaredNum').css('color','red');
-        },20000)
+        },20000);}
+        else{
+            $("#previousdeclaredNum").html("Sorry,Game is Over")
+        }
+        showNum(data.code)
     })
-    socket.on('no',function(num){
+    socket.emit('startgame');
+    socket.on('no',showNum)
+    function showNum(num){
        //console.log(num.code,arguments);
         previousNum[0]=previousNum[1];
         previousNum[1]=parseInt($('#generator').html())
@@ -66,7 +73,7 @@ $(function(){
         }
 
         localnums.push(num.code);
-    })
+    }
     socket.on('result',function(data){
         if(data.clam)
             $('#'+data.clam+'name').html(data.name);

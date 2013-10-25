@@ -93,6 +93,7 @@ function checksession(req,res,next){
 app.get('/bingo',checksession,routes.bingo);
 
 var maximum =100;
+var StartTime =new Date(2013,9,25,14,46,0,0);
 var sentNums = [];
 var num=Math.floor(Math.random()*maximum+1);
 var updatetimeStamp=new Date();
@@ -101,29 +102,17 @@ var ttu=0.5;//time to update
 var numlist=[];
 var seeder;
 var uh,fh,lh;
-sessionSockets.on('connection',function(err,socket,session){
-    console.log("Printing session");
-    if(typeof session=="undefined"){
-        console.log("Session Undefined");
-        users.listuser();
+var gamerunning= true;
+function ne(){
+    if(seed)
         return;
-    }
-        console.log(users.getNum(session.user_id));
-        users.setSocket(session.user_id,socket.id)
-    console.log(session,session.user_id);
-    if(seed){
-    seed=false;
-    prepareNumlist(num,maximum);
-    console.log(numlist,sentNums);
-    seeder= setInterval(ne,ttu*1000);
-    console.log("Created Timer");
-    }
-    function ne(){
-    var min=1,max=numlist.length;
+    if(gamerunning){
+        var min=1,max=numlist.length;
         if(numlist.length==0){
             console.log("Game over");
             io.sockets.emit('game',{status:"game_over"});
-            seed=true;
+            //seed=true;
+            gamerunning=false;
             console.log(numlist,sentNums);
             clearInterval(seeder);
             return;
@@ -135,14 +124,43 @@ sessionSockets.on('connection',function(err,socket,session){
         console.log(sentNums.length);
         io.sockets.emit('no', { code: num });
     }
-    socket.emit('welcome',{previousNums:sentNums,yourNum:users.getNum(session.user_id)});
-    socket.emit('no', { code: num });
-    //console.log("welcome",Object.keys(io.connected).length)
+}
+sessionSockets.on('connection',function(err,socket,session){
+    console.log(StartTime,new Date()> StartTime);
+    console.log("Printing session");
+    if(typeof session=="undefined"){
+        console.log("Session Undefined");
+        users.listuser();
+        return;
+    }
+    console.log(users.getNum(session.user_id));
+    users.setSocket(session.user_id,socket.id)
+    console.log(session,session.user_id);
+    connectionSetup();
+    ne()
+    //console.log("welcome",socket.id)
+    socket.on('startgame',function(){
+        if(seed){
+            connectionSetup();
+        }
+        if(new Date()> StartTime){
+        socket.emit('welcome',{previousNums:sentNums,yourNum:users.getNum(session.user_id),code:num,game:gamerunning});
+        }
+    })
     socket.on('disconnect',socketdisconnect);
     socket.on('clam',function(data){
         claming(data,socket,session);
     })
 })
+function connectionSetup(){
+    if(seed && new Date > StartTime){
+        seed=false;
+        prepareNumlist(num,maximum);
+        console.log(numlist,sentNums);
+        seeder= setInterval(ne,ttu*1000);
+        console.log("Created Timer");
+    }
+}
 function prepareNumlist(num,maximum){
     sentNums = [];
     for(var i=1;i<=maximum;i++){
