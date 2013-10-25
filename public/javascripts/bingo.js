@@ -19,8 +19,7 @@ $(function(){
         $(this).css('background',colors[colorstart++%colors.length])
          console.log(numobj);
     })
-    //var socket = io.connect('http://bingo.nodejitsu.com');
-    var socket = io.connect('http://127.0.0.1:3000');
+    var socket = io.connect();
     var localnums=[];
     var myNum ;
     socket.on('welcome',function(data){
@@ -33,10 +32,10 @@ $(function(){
         previousNum[1]=parseInt($('#generator').html())
         $('#pre').html(previousNum[0]+","+previousNum[1])
         $('#generator').html(num.code)
-        //for(var i=0;i<25;i++){
-            //if(myNum[i]==num.code)
-                //$('#cell'+(i+1)).trigger('click');
-        //}
+        for(var i=0;i<25;i++){
+            if(myNum[i]==num.code)
+                $('#cell'+(i+1)).trigger('click');
+        }
 
         localnums.push(num.code);
     })

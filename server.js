@@ -14,10 +14,6 @@ var connect = require('connect'),
     sessionStore = new connect.middleware.session.MemoryStore();
 var app = express()
     ,http = require('http')
-    ,server = http.createServer(app)
-    ,io = require('socket.io').listen(server)
-    ,SessionSockets = require('session.socket.io')
-    ,sessionSockets = new SessionSockets(io, sessionStore, cookieParser);
 // all environments
 app.set('port', process.env.PORT || 3000);
 app.set('views', __dirname + '/views');
@@ -31,6 +27,11 @@ app.use(cookieParser);
 app.use(express.session({store: sessionStore}));
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
+
+var server = http.createServer(app)
+    ,io = require('socket.io').listen(server)
+    ,SessionSockets = require('session.socket.io')
+    ,sessionSockets = new SessionSockets(io, sessionStore, cookieParser);
 
 // development only
 if ('development' == app.get('env')) {
@@ -81,9 +82,9 @@ app.post('/login',function(req,res){
 })
 function checksession(req,res,next){
     if(req.session.user_id){
+        console.log('Inside checksession');
         users.AddUser(req.session.user_id);
         next();
-        console.log('Inside checksession');
     }
     else{
         res.render('index', { title: 'Bingo',page:'index' });
@@ -102,8 +103,11 @@ var seeder;
 var uh,fh,lh;
 sessionSockets.on('connection',function(err,socket,session){
     console.log("Printing session");
-    if(typeof session=="undefined")
+    if(typeof session=="undefined"){
+        console.log("Session Undefined");
+        users.listuser();
         return;
+    }
         console.log(users.getNum(session.user_id));
         users.setSocket(session.user_id,socket.id)
     console.log(session,session.user_id);
