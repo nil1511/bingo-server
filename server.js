@@ -96,7 +96,7 @@ var sentNums = [];
 var num=Math.floor(Math.random()*maximum+1);
 var updatetimeStamp=new Date();
 var seed=true;
-var ttu=0.5;//time to update
+var ttu=5;//time to update
 var numlist=[];
 var seeder;
 var uh,fh,lh;

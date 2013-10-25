@@ -2,14 +2,19 @@ $(function(){
     var colors = ['#E67E22','#E74C3C','#7F8C8D','#8E44AD','#2980B9','#27AE60','#F39C12','#1ABC9C'];
     var colorstart = Math.floor(Math.random()*colors.length);
     var numobj=[];
+    var previousNum=[0,0];
     $('.num').click(function(e){
         console.log($(this).children('b').html());
-        if($(this).children('b').html()!=$('#generator').html())
-            return false;
+        var clickNum = $(this).children('b').html();
+        if(clickNum!=$('#generator').html()){
+            if(clickNum!=previousNum[1])
+                if(clickNum!=previousNum[0])
+                    return false;
+        }
         var idno = parseInt($(this).attr('id').split('cell')[1]);
         --idno;
         console.log(idno);
-        numobj[idno]=parseInt($(this).children('b').html());
+        numobj[idno]=parseInt(clickNum);
         if($(this).css('background-color')=='rgba(0, 0, 0, 0)')
         $(this).css('background',colors[colorstart++%colors.length])
          console.log(numobj);
@@ -24,11 +29,15 @@ $(function(){
     })
     socket.on('no',function(num){
        //console.log(num.code,arguments);
+        previousNum[0]=previousNum[1];
+        previousNum[1]=parseInt($('#generator').html())
+        $('#pre').html(previousNum[0]+","+previousNum[1])
         $('#generator').html(num.code)
-        for(var i=0;i<25;i++){
-            if(myNum[i]==num.code)
-                $('#cell'+(i+1)).trigger('click');
-        }
+        //for(var i=0;i<25;i++){
+            //if(myNum[i]==num.code)
+                //$('#cell'+(i+1)).trigger('click');
+        //}
+
         localnums.push(num.code);
     })
     socket.on('result',function(data){
