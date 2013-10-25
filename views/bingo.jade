@@ -1,11 +1,11 @@
 extends layout
 block content
-    .container.game
-        .col-md-2
+    .container
+        .col-md-2.game
             p#generator 00
             div Previous Nums 
                 label#pre 0,0
-        .col-md-2
+        .col-md-2.game
             table.table.table-bordered
                 -for(var i=0;i<25;i++){
                    -if(i%5==0){
@@ -14,10 +14,14 @@ block content
                        td.num(id="cell#{i+1}")
                         b #{number[i]}
                 -}
-        .col-md-2#clambuttons
+        .col-md-2#clambuttons.game
             button.btn.btn-danger.clams#uh(type='button') Upper House
             button.btn.btn-danger.clams#lh(type='button') lower house
             button.btn.btn-danger.clams#fh(type='button') full house
+        .col-md-6.instruction
+            p#howtoplay
+            label#time 
+            button.btn.btn-danger#letsplay Lets Play
         .chat.col-md-6
             .chatbox Number Declared when you were not online you have 30 sec to click any of these numbers
             p#previousdeclaredNum

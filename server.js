@@ -93,7 +93,7 @@ function checksession(req,res,next){
 app.get('/bingo',checksession,routes.bingo);
 
 var maximum =100;
-var StartTime =new Date(2013,9,25,14,46,0,0);
+var StartTime =new Date(2013,9,25,15,35,0,0);
 var sentNums = [];
 var num=Math.floor(Math.random()*maximum+1);
 var updatetimeStamp=new Date();
@@ -126,12 +126,17 @@ function ne(){
     }
 }
 sessionSockets.on('connection',function(err,socket,session){
-    console.log(StartTime,new Date()> StartTime);
+    //console.log(StartTime,new Date()> StartTime);
     console.log("Printing session");
     if(typeof session=="undefined"){
         console.log("Session Undefined");
         users.listuser();
         return;
+    }
+    if(new Date()<StartTime){
+        socket.emit('starttime',{time:StartTime});
+    }else{
+        socket.emit('welcome',{previousNums:sentNums,yourNum:users.getNum(session.user_id),code:num,game:gamerunning});
     }
     console.log(users.getNum(session.user_id));
     users.setSocket(session.user_id,socket.id)

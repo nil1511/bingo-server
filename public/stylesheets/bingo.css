@@ -30,3 +30,6 @@ td.num{
 #previousdeclaredNum{
     word-wrap: break-word;
 }
+.instruction{
+    display:none;
+}

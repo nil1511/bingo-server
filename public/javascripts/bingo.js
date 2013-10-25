@@ -59,7 +59,43 @@ $(function(){
         }
         showNum(data.code)
     })
-    socket.emit('startgame');
+    $('#letsplay').click(function(){
+        if($(this).hasClass('btn-danger'))
+            return;
+        socket.emit('startgame');
+        $('.instruction').hide();
+        $('.game').show();
+   })
+    socket.on('starttime',function(data){
+        if(data.time){
+            $('.game').hide();
+            $('.instruction').show();
+       var timer=setInterval(function(){
+                var time =new Date(data.time);
+                var ctime=new Date();
+                var tt= stoh(time-ctime);
+                if(tt.h<0){
+                    $('#time').html('You can Start Playing');
+                    $('#letsplay').removeClass('btn-danger').addClass('btn-success')
+                    clearInterval(timer);
+                    return;
+                }
+                //console.log(ctime,time,tt);
+                $('#time').html("Game Starts in "+tt.h+" hours "+tt.m+" mins "+tt.s+" seconds")
+            },1000)
+        }
+        //console.log(data);
+    })
+    function stoh(diff){
+var msec = diff;
+var hh = Math.floor(msec / 1000 / 60 / 60);
+msec -= hh * 1000 * 60 * 60;
+var mm = Math.floor(msec / 1000 / 60);
+msec -= mm * 1000 * 60;
+var ss = Math.floor(msec / 1000);
+msec -= ss * 1000;
+return {h:hh,m:mm,s:ss}
+    }
     socket.on('no',showNum)
     function showNum(num){
        //console.log(num.code,arguments);
