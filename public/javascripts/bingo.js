@@ -44,7 +44,9 @@ $(function(){
         console.log(data);
         myNum= data.yourNum;
         previousNums=data.previousNums;
-        for(var i=0;i<previousNums.length;i++){
+        console.log($('#previousdeclaredNum').html());
+        $('#previousdeclaredNum').html(previousNums[0])
+        for(var i=1;i<previousNums.length;i++){
             $('#previousdeclaredNum').html($('#previousdeclaredNum').html()+","+previousNums[i])
         }
         setTimeout(function(){
