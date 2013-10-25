@@ -3,28 +3,54 @@ $(function(){
     var colorstart = Math.floor(Math.random()*colors.length);
     var numobj=[];
     var previousNum=[0,0];
+    var previousClamable= true;
     $('.num').click(function(e){
         console.log($(this).children('b').html());
         var clickNum = $(this).children('b').html();
         if(clickNum!=$('#generator').html()){
             if(clickNum!=previousNum[1])
                 if(clickNum!=previousNum[0])
-                    return false;
+                {
+                    if(previousNums.length!=0&&previousClamable){
+                        for(var i=0;i<previousNums.length;i++){
+                            if(previousNums[i]==clickNum){
+                            performClick(this)
+                            return;
+                            }
+                        }
+                    }
+                    else {
+                        return false;
+                    }
+                }
         }
-        var idno = parseInt($(this).attr('id').split('cell')[1]);
+        performClick(this)
+    })
+    function performClick(cell){
+       var clickNum = $(cell).children('b').html();
+       var idno = parseInt($(cell).attr('id').split('cell')[1]);
         --idno;
         console.log(idno);
         numobj[idno]=parseInt(clickNum);
-        if($(this).css('background-color')=='rgba(0, 0, 0, 0)')
-        $(this).css('background',colors[colorstart++%colors.length])
+        if($(cell).css('background-color')=='rgba(0, 0, 0, 0)')
+        $(cell).css('background',colors[colorstart++%colors.length])
          console.log(numobj);
-    })
+    }
     var socket = io.connect();
     var localnums=[];
     var myNum ;
+    var previousNums=[];
     socket.on('welcome',function(data){
         console.log(data);
         myNum= data.yourNum;
+        previousNums=data.previousNums;
+        for(var i=0;i<previousNums.length;i++){
+            $('#previousdeclaredNum').html($('#previousdeclaredNum').html()+","+previousNums[i])
+        }
+        setTimeout(function(){
+            previousClamable=false;
+            $('#previousdeclaredNum').css('color','red');
+        },20000)
     })
     socket.on('no',function(num){
        //console.log(num.code,arguments);
@@ -47,7 +73,7 @@ $(function(){
     socket.on('game',function(data){
         console.log(data);
         if(data.status=="game_over")
-            alert('Game Over');
+            alert('Game Over but you can clam unclamed houses');
         if(data.status=="running"){
             $('.clams').attr('disabled','true');
         }
@@ -89,7 +115,6 @@ $(function(){
                 socket.emit('clam',{clams:$(this).attr('id'),num:numobj})
                 break;
             default:
-
         }
     })
 });
