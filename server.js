@@ -37,6 +37,8 @@ var server = http.createServer(app)
 if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
+
+//var db = new ApplicationDB('paulo.mongohq.com',10099,'nodejitsu','dfe4b2c329cc079231ce74c7237f615a','nodejitsudb8322450453')
 var db = new ApplicationDB('localhost',27017,'','','bingo')
 
 app.get('/', routes.index);
@@ -93,12 +95,12 @@ function checksession(req,res,next){
 app.get('/bingo',checksession,routes.bingo);
 
 var maximum =100;
-var StartTime =new Date(2013,9,25,15,35,0,0);
+var StartTime =new Date(2013,9,25,16,50,0,0);
 var sentNums = [];
 var num=Math.floor(Math.random()*maximum+1);
 var updatetimeStamp=new Date();
 var seed=true;
-var ttu=0.5;//time to update
+var ttu=10;//time to update
 var numlist=[];
 var seeder;
 var uh,fh,lh;
@@ -142,6 +144,7 @@ sessionSockets.on('connection',function(err,socket,session){
     users.setSocket(session.user_id,socket.id)
     console.log(session,session.user_id);
     connectionSetup();
+    if(seed)
     ne()
     //console.log("welcome",socket.id)
     socket.on('startgame',function(){

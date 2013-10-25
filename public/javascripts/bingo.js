@@ -14,10 +14,11 @@ $(function(){
                     if(previousNums.length!=0&&previousClamable){
                         for(var i=0;i<previousNums.length;i++){
                             if(previousNums[i]==clickNum){
-                            performClick(this)
-                            return;
+                                performClick(this)
+                                return false;
                             }
                         }
+                        return false;
                     }
                     else {
                         return false;
@@ -27,6 +28,7 @@ $(function(){
         performClick(this)
     })
     function performClick(cell){
+        console.log("Click"+cell);
        var clickNum = $(cell).children('b').html();
        var idno = parseInt($(cell).attr('id').split('cell')[1]);
         --idno;
@@ -103,10 +105,10 @@ return {h:hh,m:mm,s:ss}
         previousNum[1]=parseInt($('#generator').html())
         $('#pre').html(previousNum[0]+","+previousNum[1])
         $('#generator').html(num.code)
-        for(var i=0;i<25;i++){
-            if(myNum[i]==num.code)
-                $('#cell'+(i+1)).trigger('click');
-        }
+        //for(var i=0;i<25;i++){
+            //if(myNum[i]==num.code)
+                //$('#cell'+(i+1)).trigger('click');
+        //}
 
         localnums.push(num.code);
     }
