@@ -95,8 +95,7 @@ function checksession(req,res,next){
 app.get('/bingo',checksession,routes.bingo);
 
 var maximum =100;
-var StartTime =new Date(2013,9,25,18,30,0,0);
-//var StartTime =new Date;
+var StartTime =new Date(2013,9,25,19,47,0,0);
 var sentNums = [];
 var num=Math.floor(Math.random()*maximum+1);
 var updatetimeStamp=new Date();
@@ -157,11 +156,19 @@ sessionSockets.on('connection',function(err,socket,session){
         }
         if(new Date()> StartTime){
         socket.emit('welcome',{previousNums:sentNums,yourNum:users.getNum(session.user_id),code:num,game:gamerunning});
+
         }
     })
+    db.findOne({_id: DB.ObjectID(session.user_id)},function(err,row){
+        socket.emit('whoami',{name:row.name})
+    })
+
     socket.on('disconnect',socketdisconnect);
     socket.on('clam',function(data){
         claming(data,socket,session);
+    })
+    socket.on('chatmsg',function(data){
+        socket.broadcast.emit('broadmsg',data);
     })
 })
 function connectionSetup(){

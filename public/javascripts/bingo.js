@@ -2,6 +2,7 @@ $(function(){
     var numobj=[];
     var previousNum=[0,0];
     var previousClamable= true;
+    var myname;
     $('.num').click(function(e){
         console.log($(this).children('b').html());
         var clickNum = $(this).children('b').html();
@@ -40,6 +41,10 @@ $(function(){
     var localnums=[];
     var myNum=[] ;
     var previousNums=[];
+    socket.on('whoami',function(data){
+        myname=data.name;
+        console.log(myname,data);
+    })
     socket.on('welcome',function(data){
         console.log(data);
         myNum= data.yourNum;
@@ -96,14 +101,14 @@ $(function(){
         //console.log(data);
     })
     function stoh(diff){
-var msec = diff;
-var hh = Math.floor(msec / 1000 / 60 / 60);
-msec -= hh * 1000 * 60 * 60;
-var mm = Math.floor(msec / 1000 / 60);
-msec -= mm * 1000 * 60;
-var ss = Math.floor(msec / 1000);
-msec -= ss * 1000;
-return {h:hh,m:mm,s:ss}
+        var msec = diff;
+        var hh = Math.floor(msec / 1000 / 60 / 60);
+        msec -= hh * 1000 * 60 * 60;
+        var mm = Math.floor(msec / 1000 / 60);
+        msec -= mm * 1000 * 60;
+        var ss = Math.floor(msec / 1000);
+        msec -= ss * 1000;
+        return {h:hh,m:mm,s:ss}
     }
     socket.on('no',showNum)
     function showNum(num){
@@ -131,6 +136,23 @@ return {h:hh,m:mm,s:ss}
         if(data.clam)
             $('#'+data.clam+'name').html(data.name);
         console.log(data.clam,data.name);
+    })
+    $('#sendchat').click(function(){
+        if($('#chatmsg').val()!=''){
+        socket.emit('chatmsg',{msg:$('#chatmsg').val(),sender:myname})
+        $('.messages').append('<blockquote style="width:100%"><p>'+$('#chatmsg').val()+'</p><small>'+myname+'</small></blockquote>')
+        }
+        $('#chatmsg').val('');
+        $('.messages').scrollTop(999999999)
+    })
+    $('#chatmsg').keydown(function(e){
+        if(e.keyCode==13)
+            $('#sendchat').trigger('click');
+    })
+    socket.on('broadmsg',function(data){
+        console.log(data);
+        $('.messages').scrollTop(999999999)
+        $('.messages').append('<blockquote class="pull-right" style="width:100%"><p>'+data.msg+'</p><small>'+data.sender+'</small></blockquote>')
     })
     socket.on('game',function(data){
         console.log(data);

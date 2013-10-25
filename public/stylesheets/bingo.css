@@ -33,3 +33,7 @@ td.num{
 .instruction{
     display:none;
 }
+.messages{
+    height:150px;
+    overflow-y:scroll;
+}
