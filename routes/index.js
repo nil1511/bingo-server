@@ -4,7 +4,7 @@
  */
 var users= require('../modules/users')
 exports.index = function(req, res){
-  res.render('index', { title: 'Bingousie',page:'index' });
+  res.render('index', { title: 'Bingo',page:'index' });
 };
 exports.bingo = function(req,res){
     var number = getBingoCard(1,100,25);

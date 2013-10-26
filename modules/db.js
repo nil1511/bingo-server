@@ -68,21 +68,4 @@ ApplicationDB.prototype.save=function(data,callback){
         }
     })
 }
-//ApplicationDB.prototype.findByObjectID = function(data,collection){
-    //console.log(data);
-    //this.getCollection(function(err,bingo_collection){
-        //if(err)
-            //callback(err);
-        //else{
-            //var newdata= {_id:new ObjectId(data._id)}
-            //bingo_collection.findOne(newdata,function(err,result){
-                //if(err)
-                    //callback(err)
-                //else
-                    //callback(null,result);
-
-            //})
-        //}
-    //})
-//}
 exports.ApplicationDB = ApplicationDB;

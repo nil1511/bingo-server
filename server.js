@@ -119,8 +119,8 @@ function ne(){
         if(numlist.length==0){
             console.log("Game over");
             io.sockets.emit('game',{status:"game_over"});
-            seed=true;
-            StartTime =new Date(new Date().getTime()+(5*60*1000));
+            //seed=true;
+            //StartTime =new Date(new Date().getTime()+(5*60*1000));
             gamerunning=false;
             //console.log(numlist,sentNums);
             clearInterval(seeder);
