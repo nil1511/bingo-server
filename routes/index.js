@@ -7,10 +7,18 @@ exports.index = function(req, res){
   res.render('index', { title: 'Bingo',page:'index' });
 };
 exports.bingo = function(req,res){
-    var number = getBingoCard(1,100,25);
-    users.setNum(req.session.user_id,number);
-    //users.listuser();
-    res.render('bingo',{page:'bingo',number:number});
+    var number=users.getNum(req.session.user_id),clickNum=null;
+    if(number==null){
+        number = getBingoCard(1,100,25)
+        users.setNum(req.session.user_id,number);
+    }
+    else{
+        clickNum=users.clickNum(req.session.user_id,undefined,true);
+        console.log("Clicked",clickNum);
+        if(clickNum)
+        console.log("length",clickNum.length);
+    }
+    res.render('bingo',{page:'bingo',number:number,clicked:clickNum});
 }
 function getBingoCard(min,max,no){
     var ob={};
@@ -24,6 +32,15 @@ function getBingoCard(min,max,no){
         if((i+1)==no && Object.keys(ob).length!=no){
             i=i-(no-Object.keys(ob).length);
             //console.log('in obj i modifier');
+        }
+    }
+    for(var i=0;i<number.length;i++){
+        for(var j=0;j<number.length;j++){
+            if(number[i]<number[j])
+                {var t = number[j]
+                    number[j]=number[i];
+                    number[i]=t;
+                }
         }
     }
     //console.log(ob,Object.keys(ob).length,number.length);

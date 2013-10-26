@@ -108,9 +108,16 @@ ul.nav.menu li.active a{
     bottom: 0;
     right: 0;
 }
+.clicked{
+background-color:rgb(41, 128, 185);
+}
 #chatmsg{
 width:100%;
 position:absolute;
 bottom:0;
 }
-
+.amo{
+    padding:0 !important;
+    font-size:small;
+    vertical-align:middle !important;
+}

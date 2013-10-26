@@ -15,7 +15,7 @@ var connect = require('connect'),
 var app = express()
     ,http = require('http')
 // all environments
-app.set('port', process.env.PORT || 80);
+app.set('port', process.env.PORT || 3000);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 app.use(express.favicon());
@@ -91,7 +91,8 @@ app.get('/logout',function(req,res){
 function checksession(req,res,next){
     if(req.session.user_id){
         //console.log('Inside checksession');
-        users.AddUser(req.session.user_id);
+        if(users.notExist(req.session.user_id))
+            users.AddUser(req.session.user_id);
         next();
     }
     else{
@@ -101,12 +102,12 @@ function checksession(req,res,next){
 app.get('/bingo',checksession,routes.bingo);
 
 var maximum =100;
-var StartTime =new Date(2013,9,26,15,02,0,0);
+var StartTime =new Date(2013,9,26,21,00,0,0);
 var sentNums = [];
 var num=Math.floor(Math.random()*maximum+1);
 var updatetimeStamp=new Date();
 var seed=true;
-var ttu=15;//time to update
+var ttu=10;//time to update
 var numlist=[];
 var seeder;
 var uh,fh,lh;
@@ -116,11 +117,11 @@ function ne(){
         return;
     if(gamerunning){
         var min=1,max=numlist.length;
-        if(numlist.length==0){
+        if(numlist.length==0 || Object.keys(winner).length==3){
             console.log("Game over");
             io.sockets.emit('game',{status:"game_over"});
-            //seed=true;
-            //StartTime =new Date(new Date().getTime()+(5*60*1000));
+            seed=true;
+            StartTime =new Date(new Date().getTime()+(2*60*1000));
             gamerunning=false;
             //console.log(numlist,sentNums);
             clearInterval(seeder);
@@ -146,7 +147,10 @@ sessionSockets.on('connection',function(err,socket,session){
     if(new Date()<StartTime){
         socket.emit('starttime',{time:StartTime,stime:new Date()});
     }else{
-        socket.emit('welcome',{previousNums:sentNums,yourNum:users.getNum(session.user_id),code:num,game:gamerunning});
+         //if(users.getNum(session.user_id))
+         //socket.emit('welcome',{previousNums:sentNums,code:num,game:gamerunning});
+            //else
+        socket.emit('welcome',{previousNums:sentNums,code:num,game:gamerunning});
     }
     //console.log(users.getNum(session.user_id));
     users.setSocket(session.user_id,socket.id)
@@ -162,14 +166,15 @@ sessionSockets.on('connection',function(err,socket,session){
             io.sockets.emit('gamestarted')
         }
         if(new Date()> StartTime){
-        socket.emit('welcome',{previousNums:sentNums,yourNum:users.getNum(session.user_id),code:num,game:gamerunning});
-
+        socket.emit('welcome',{previousNums:sentNums,code:num,game:gamerunning});
         }
     })
     db.findOne({_id: DB.ObjectID(session.user_id)},function(err,row){
         socket.emit('whoami',{name:row.name})
     })
-
+    socket.on('clicknum',function(data){
+        users.clickNum(session.user_id,data.number)
+    })
     socket.on('disconnect',socketdisconnect);
     socket.on('clam',function(data){
         claming(data,socket,session);
@@ -206,6 +211,7 @@ function socketdisconnect(){
     //console.log("disconnected",Object.keys(io.connected).length,numlist);
 }
 var checklist = {'uh':15,'fh':25,'lh':25},initial={'lh':11,'uh':0,'fh':0};
+var winner  = {};
 //Disabled count Check counts = {'uh':15,'lh':15,'fh':25};
 function claming(data,socket,session){
     var count=0;
@@ -231,10 +237,11 @@ function claming(data,socket,session){
     //console.log(session);
     db.findOne({_id: DB.ObjectID(session.user_id)},function(err,row){
         console.log("Winner Name for "+data.clams+" is "+row.name);
+        winner[data.clam]=row.name;
         io.sockets.emit('result',{clam:data.clams,name:row.name})
     })
     socket.emit('game',{status:"running"});
     console.log('Clam ' +data.clams+' has been won');
     //console.log(data,socket,session);
 }
-server.listen(80);
+server.listen(3000);

@@ -2,6 +2,7 @@ extends layout
 block content
     nav.navbar.navbar-default.header
         .collapse.navbar-collapse.navbar-ex1-collapse
+            label The Event will start 27/10/13 10:00PM IST
             ul.nav.navbar-nav.navbar-right.menu
                 li.active
                     a Game
@@ -18,6 +19,9 @@ block content
                 div Previous Nums 
                     label#pre 0,0
             .game.card
+                script
+                    var clicks= !{JSON.stringify(clicked)}
+                    var myNum=!{JSON.stringify(number)}
                 table.table.table-bordered
                     -for(var i=0;i<25;i++){
                        -if(i%5==0){
@@ -27,6 +31,7 @@ block content
                             b #{number[i]}
                     -}
         .col-md-2#clambuttons.game
+            label Claim Here
             button.btn.btn-danger.clams#uh(type='button') Upper House
             button.btn.btn-danger.clams#lh(type='button') lower house
             button.btn.btn-danger.clams#fh(type='button') full house
@@ -87,8 +92,15 @@ block content
         .chat.col-md-5
             .prenums Number Declared when you were not online you have 30 sec to click any of these numbers
             p#previousdeclaredNum
-            .allNum All Number Declared uptill Now
-            p#allNum
+            label.allNum All Number Declared uptill Now
+            -//p#allNum
+            table.allNum.table.table-condensed
+                -for(var i=0,k=0;i<5;i++){
+                    tr
+                    -for(var j=0;j<20;j++,k++){
+                        td(id='an#{k}').amo
+                    -}
+                -}
     .chatbox
         .openchat Maximize chat
         .messages

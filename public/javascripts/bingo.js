@@ -34,43 +34,53 @@ $(function(){
         performClick(this)
     })
     function performClick(cell){
-        console.log("Click"+cell);
-       var clickNum = $(cell).children('b').html();
-       var idno = parseInt($(cell).attr('id').split('cell')[1]);
+        //console.log("Click"+cell);
+        var clickNum = $(cell).children('b').html();
+        var idno = parseInt($(cell).attr('id').split('cell')[1]);
         --idno;
-        console.log(idno);
+        //console.log(idno);
         numobj[idno]=parseInt(clickNum);
         //if($(cell).css('background-color')=='')
         $(cell).css('background-color','rgb(41, 128, 185)')
-         console.log(numobj);
+        socket.emit('clicknum',{number:clickNum});
+        //console.log(numobj);
     }
     var socket = io.connect();
     var localnums=[];
-    var myNum=[] ;
     var previousNums=[];
     socket.on('whoami',function(data){
         myname=data.name;
-        console.log(myname,data);
+        //console.log(myname,data);
     })
+    var ano=0;
     socket.on('welcome',function(data){
-        console.log(data);
-        myNum= data.yourNum;
+        //console.log(data);
+        if(clicks)
+        for(var i=0;i<clicks.length;i++){
+           var c= myNum.indexOf(clicks[i]);
+            if(c+1){
+                $('#cell'+(c+1)).css('background-color','rgb(41, 128, 185)')
+
+            }
+        }
         previousNums=data.previousNums;
-        //console.log($('#previousdeclaredNum').html());
+        console.log(previousNums);
         $('#previousdeclaredNum').html(previousNums[0])
-        if(data.game){
-            $('.prenums').html('Numbers Declared when you were not online you have 30 seconds to fill them');
-        for(var i=1;i<previousNums.length;i++){
-            $('#previousdeclaredNum').html($('#previousdeclaredNum').html()+","+previousNums[i])
+        if(data.game && !clicks){
+            if(previousdeclaredNum.length==0)
+            $('.prenums').show().html('Numbers Declared when you were not online.<br>You have 60 seconds to fill them');
+        for(var i=1;i<previousNums.length;i++,ano++){
+            $('#an'+(i-1)).html(previousNums[i-1]);
+            $('#previousdeclaredNum').show().html($('#previousdeclaredNum').html()+","+previousNums[i])
         }
         setTimeout(function(){
             previousClamable=false;
             $('#previousdeclaredNum').css('color','red');
-        },1000*30);
+        },5000*12);
         $('#allNum').html($('#previousdeclaredNum').html())
         }
-        else{
-            $("#previousdeclaredNum").html("Sorry,Game is Over")
+        else if(!clicks){
+            $("#previousdeclaredNum").show().html("Sorry,Game is Over")
         }
         showNum(data);
     })
@@ -121,14 +131,9 @@ $(function(){
         previousNum[0]=previousNum[1];
         previousNum[1]=parseInt($('#generator').html())
         $('#pre').html(previousNum[0]+","+previousNum[1])
-        if($('#allNum').html()=='')
-            $('#allNum').html(num.code);
-        else{
-            var cstring = $('#allNum').html();
-            var nu = cstring.substring(1+cstring.lastIndexOf(','));
-            if(nu!=num.code)
-            $('#allNum').html($('#allNum').html()+","+num.code);
-        }
+            //var cstring = $('#allNum').html();
+            //var nu = cstring.substring(1+cstring.lastIndexOf(','));
+            $('#an'+(ano++)).html(num.code);
         $('#generator').html(num.code)
         //for(var i=0;i<25;i++){
             //if(myNum[i]==num.code)
