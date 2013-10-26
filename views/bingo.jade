@@ -1,35 +1,54 @@
 extends layout
 block content
+    nav.navbar.navbar-default.header
+        .collapse.navbar-collapse.navbar-ex1-collapse
+            ul.nav.navbar-nav.navbar-right
+                li.active
+                    a Game
+                li
+                    a How to play
+                li
+                    a Quick play
+                li
+                    a Logout
     .container
-        .col-md-2.game
-            p#generator 00
-            div Previous Nums 
-                label#pre 0,0
-        .col-md-2.game
-            table.table.table-bordered
-                -for(var i=0;i<25;i++){
-                   -if(i%5==0){
-                    tr(id="row#{i/5+1}")
-                   -}
-                       td.num(id="cell#{i+1}")
-                        b #{number[i]}
-                -}
+        .col-md-5.game
+            div.precont
+                p#generator 00
+                div Previous Nums 
+                    label#pre 0,0
+            .game.card
+                table.table.table-bordered
+                    -for(var i=0;i<25;i++){
+                       -if(i%5==0){
+                        tr(id="row#{i/5+1}")
+                       -}
+                           td.num(id="cell#{i+1}")
+                            b #{number[i]}
+                    -}
         .col-md-2#clambuttons.game
             button.btn.btn-danger.clams#uh(type='button') Upper House
             button.btn.btn-danger.clams#lh(type='button') lower house
             button.btn.btn-danger.clams#fh(type='button') full house
-        .col-md-6.instruction
+        .col-md-7.instruction
             p#howtoplay
             label#time 
             button.btn.btn-danger#letsplay Lets Play
-        .chat.col-md-6
-            .prenums Number Declared when you were not online you have 30 sec to click any of these numbers
-            p#previousdeclaredNum
-            .allNum All Number Declared uptill Now
-            p#allNum
-
-    .container.help
         .col-md-3
+            label Results
+            table.table.table-condensed#result
+                tr
+                    td Full House
+                    td#fhname
+                tr
+                    td Upper House
+                    td#uhname
+                tr
+                    td Lower House
+                    td#lhname
+       
+    .container.help
+        .samplecard
             table.table.table-bordered
                 -for(var i=0;i<25;i++){
                 -if(i%5==0){
@@ -42,7 +61,7 @@ block content
                     td #{i+1}
                 -}}
             p upperhouse
-        .col-md-3
+        .samplecard
             table.table.table-bordered
                 -for(var i=0;i<25;i++){
                 -if(i%5==0){
@@ -51,7 +70,7 @@ block content
                     td.sel #{i+1}
                 -}
             p fullhouse
-        .col-md-3
+        .samplecard
             table.table.table-bordered
                 -for(var i=0;i<25;i++){
                 -if(i%5==0){
@@ -64,21 +83,13 @@ block content
                     td #{i+1}
                 -}}
             p lowerhouse
-        .col-md-3
-            label Results
-            table.table.table-condensed
-                tr
-                    td Full House
-                    td#fhname
-                tr
-                    td Upper House
-                    td#uhname
-                tr
-                    td Lower House
-                    td#lhname
-    .container.chat
+        .chat.col-md-5
+            .prenums Number Declared when you were not online you have 30 sec to click any of these numbers
+            p#previousdeclaredNum
+            .allNum All Number Declared uptill Now
+            p#allNum
+    //.container.chat
         .messages.col-md-12
-            
         .transmission.col-md-12
             input.col-md-10#chatmsg(type="text",placeholder="messages")
             input.col-md-2#sendchat(type="button",value="send")

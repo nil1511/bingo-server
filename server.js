@@ -15,7 +15,7 @@ var connect = require('connect'),
 var app = express()
     ,http = require('http')
 // all environments
-app.set('port', process.env.PORT || 3000);
+app.set('port', process.env.PORT || 80);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 app.use(express.favicon());
@@ -168,7 +168,7 @@ sessionSockets.on('connection',function(err,socket,session){
         claming(data,socket,session);
     })
     socket.on('chatmsg',function(data){
-        socket.broadcast.emit('broadmsg',data);
+       socket.broadcast.emit('broadmsg',data);
     })
 })
 function connectionSetup(){
@@ -230,4 +230,4 @@ function claming(data,socket,session) {i
     console.log('Clam ' +data.clams+' has been won');
     //console.log(data,socket,session);
 }
-server.listen(3000);
+server.listen(80);

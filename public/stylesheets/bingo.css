@@ -1,16 +1,30 @@
 .num b{
     cursor:pointer;
 }
+td{
+    width:40px;
+    height:40px;
+}
+table{
+    width:auto !important;
+}
 td.num{
-    /*height:50px;*/
-    /*width:50px;*/
     text-align:center;
     line-height:20px;
 }
 #generator{
+    display:inline-block;
     border:thick solid #000;
-    font-size:100px;
+    font-size: 90px;
     text-align:center;
+    width: 185px;
+    height: 185px;
+    line-height: 185px;
+    background: #ddd;
+}
+.precont{
+    display:inline-block;
+    float:left;
 }
 .clams{
     margin-top:5px;
@@ -20,6 +34,16 @@ td.num{
 }
 .sel{
     background-color:green;
+}
+.card{
+    float:right;
+}
+#result{
+    width:100% !important;
+}
+.samplecard{
+    display:inline-block;
+    margin-right:10px;
 }
 .chatbox{
     height:100%;
@@ -37,3 +61,20 @@ td.num{
     height:150px;
     overflow-y:scroll;
 }
+ul.nav li a{
+    color:#fff !important;
+}
+ul.nav li:hover{
+    background:#2C3E50;
+}
+ul.nav li.active a{
+    color:#555 !important;
+    font-weight:bold;
+}
+.header{
+    border-radius:0
+}
+.card td{
+    background:#fff;
+}
+

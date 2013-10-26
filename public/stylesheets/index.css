@@ -1,16 +1,17 @@
-body {
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-}
-
-a {
-  color: #00B7FF;
-}
-li{
-    display: inline-block;
-    border: 1px solid black;
-    margin: 2px;
-    padding: 2px;
-}
 .register{
     display:none;
+}
+.header h1{
+    margin:0;
+    padding:10px 0 10px 0px;
+}
+#login{
+    padding-top:50px;
+    background:#F1C40F;
+    padding-bottom:70px;
+    border-radius:0 0 8px 8px;
+}
+.rightcontent{
+    background-color:gray;
+    height:100%;
 }

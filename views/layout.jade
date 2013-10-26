@@ -2,13 +2,15 @@ doctype 5
 html
   head
     title= title
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
     link(rel='stylesheet', href='/stylesheets/normalize.css')
-    link(rel='stylesheet', href='/stylesheets/bootstrap.css')
+    link(rel='stylesheet', href='/stylesheets/bootstrap.min.css')
+    link(rel='stylesheet', href='/stylesheets/common.css')
     link(rel='stylesheet', href='/stylesheets/#{page}.css')
    -if(page=='bingo'){
     script(type='text/javascript', src="/socket.io/socket.io.js")
    -}
-    script(type='text/javascript', src='/javascripts/jquery-2.0.3.js')
+    script(type='text/javascript', src='/javascripts/jquery-2.0.3.min.js')
     script(type='text/javascript', src='/javascripts/jquery.md5.js')
     script(type='text/javascript', src='/javascripts/#{page}.js')
   body
