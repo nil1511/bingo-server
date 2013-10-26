@@ -116,4 +116,8 @@ width:100%;
 position:absolute;
 bottom:0;
 }
-
+.amo{
+    padding:0 !important;
+    font-size:small;
+    vertical-align:middle !important;
+}

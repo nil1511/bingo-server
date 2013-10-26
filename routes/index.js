@@ -34,6 +34,15 @@ function getBingoCard(min,max,no){
             //console.log('in obj i modifier');
         }
     }
+    for(var i=0;i<number.length;i++){
+        for(var j=0;j<number.length;j++){
+            if(number[i]<number[j])
+                {var t = number[j]
+                    number[j]=number[i];
+                    number[i]=t;
+                }
+        }
+    }
     //console.log(ob,Object.keys(ob).length,number.length);
     return number;
 }
