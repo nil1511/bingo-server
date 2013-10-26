@@ -2,7 +2,7 @@ extends layout
 block content
     nav.navbar.navbar-default.header
         .collapse.navbar-collapse.navbar-ex1-collapse
-            ul.nav.navbar-nav.navbar-right
+            ul.nav.navbar-nav.navbar-right.menu
                 li.active
                     a Game
                 li
@@ -88,8 +88,9 @@ block content
             p#previousdeclaredNum
             .allNum All Number Declared uptill Now
             p#allNum
-    //.container.chat
-        .messages.col-md-12
-        .transmission.col-md-12
-            input.col-md-10#chatmsg(type="text",placeholder="messages")
-            input.col-md-2#sendchat(type="button",value="send")
+    .chatbox
+        .messages
+            .ch Minimize Chat
+            .msgs
+        .transmission
+            input#chatmsg(type="text",placeholder="messages")

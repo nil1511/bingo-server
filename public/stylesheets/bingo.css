@@ -20,7 +20,13 @@ td.num{
     width: 185px;
     height: 185px;
     line-height: 185px;
-    background: #ddd;
+   -webkit-user-select: none;  /* Chrome all / Safari all */
+   -moz-user-select: none;     /* Firefox all */
+   -ms-user-select: none;      /* IE 10+ */
+   /* No support for these yet, use at own risk */
+   -o-user-select: none;
+   user-select: none;
+   background: #ddd;
 }
 .precont{
     display:inline-block;
@@ -45,29 +51,37 @@ td.num{
     display:inline-block;
     margin-right:10px;
 }
-.chatbox{
-    height:100%;
-}
 .help{
     text-align:center;
 }
 #previousdeclaredNum,#allNum{
     word-wrap: break-word;
 }
+.ch{
+    width:100%;
+    background:#ddd;
+    cursor:pointer;
+    padding:5px;
+    padding-left:15px;
+    position:fixed;
+}
 .instruction{
     display:none;
 }
 .messages{
-    height:150px;
-    overflow-y:scroll;
+    height:100%;
+    overflow-y:auto;
 }
-ul.nav li a{
+.msgs{
+    margin-top:27px;
+}
+ul.nav.menu li a{
     color:#fff !important;
 }
-ul.nav li:hover{
+ul.nav.menu li:hover{
     background:#2C3E50;
 }
-ul.nav li.active a{
+ul.nav.menu li.active a{
     color:#555 !important;
     font-weight:bold;
 }
@@ -75,6 +89,26 @@ ul.nav li.active a{
     border-radius:0
 }
 .card td{
+    -webkit-user-select: none;  /* Chrome all / Safari all */
+    -moz-user-select: none;     /* Firefox all */
+    -ms-user-select: none;      /* IE 10+ */
+
+    /* No support for these yet, use at own risk */
+    -o-user-select: none;
+    user-select: none;
     background:#fff;
+}
+.chatbox{
+    position: fixed;
+    width: 250px;
+    background: #fdfdfd;
+    bottom: 0;
+    right: 0;
+    height: 350px;
+}
+#chatmsg{
+width:100%;
+position:absolute;
+bottom:0;
 }
 

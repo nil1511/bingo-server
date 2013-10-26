@@ -3,6 +3,13 @@ $(function(){
     var previousNum=[0,0];
     var previousClamable= true;
     var myname;
+    if(navigator.userAgent.search('Chrome')+1){
+        $('.card td').css('background','#FC9C21')
+        console.log("You are using  chrome");
+    }else if(navigator.userAgent.search('Firefox')+1){
+        $('.card td').css('background','green')
+        console.log("You are using Firefox");
+    }
     $('.num').click(function(e){
         console.log($(this).children('b').html());
         var clickNum = $(this).children('b').html();
@@ -137,22 +144,20 @@ $(function(){
             $('#'+data.clam+'name').html(data.name);
         console.log(data.clam,data.name);
     })
-    $('#sendchat').click(function(){
-        if($('#chatmsg').val()!=''){
-        socket.emit('chatmsg',{msg:$('#chatmsg').val(),sender:myname})
-        $('.messages').append('<blockquote style="width:100%"><p>'+$('#chatmsg').val()+'</p><small>'+myname+'</small></blockquote>')
-        }
-        $('#chatmsg').val('');
-        $('.messages').scrollTop(999999999)
-    })
     $('#chatmsg').keydown(function(e){
-        if(e.keyCode==13)
-            $('#sendchat').trigger('click');
+        if(e.keyCode==13){
+            if($('#chatmsg').val()!=''){
+            socket.emit('chatmsg',{msg:$('#chatmsg').val(),sender:myname})
+            $('.msgs').append('<blockquote style="width:100%"><p>'+$('#chatmsg').val()+'</p><small>'+myname+'</small></blockquote>')
+            }
+            $('#chatmsg').val('');
+            $('.messages').scrollTop($('.messages')[0].scrollHeight)
+        }
     })
     socket.on('broadmsg',function(data){
         console.log(data);
-        $('.messages').scrollTop(999999999)
-        $('.messages').append('<blockquote class="pull-right" style="width:100%"><p>'+data.msg+'</p><small>'+data.sender+'</small></blockquote>')
+        $('.msgs').scrollTop(999999999)
+        $('.msgs').append('<blockquote class="pull-right" style="width:100%"><p>'+data.msg+'</p><small>'+data.sender+'</small></blockquote>')
     })
     socket.on('game',function(data){
         console.log(data);
@@ -161,7 +166,7 @@ $(function(){
         if(data.status=="running"){
             $('.clams').attr('disabled','true');
         }
-    })
+    });
     socket.on('message',function(d){
         console.log(d);
     });
