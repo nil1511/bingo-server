@@ -154,6 +154,16 @@ $(function(){
             $('.messages').scrollTop($('.messages')[0].scrollHeight)
         }
     })
+    $('.ch').click(function(){
+        $('.messages').slideUp();
+        $('.transmission').slideUp('fast');
+        $('.openchat').show();
+    })
+    $('.openchat').click(function(){
+        $('.openchat').hide();
+        $('.messages').slideDown();
+        $('.transmission').slideDown('fast');
+    })
     socket.on('broadmsg',function(data){
         console.log(data);
         $('.msgs').scrollTop(999999999)
