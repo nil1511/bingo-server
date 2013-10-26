@@ -70,7 +70,7 @@ td.num{
 .openchat{
     position:relative;
 }
-.instruction,.openchat{
+.instruction,.messages,.transmission{
     display:none;
 }
 .messages{

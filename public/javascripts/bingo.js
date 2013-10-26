@@ -148,7 +148,7 @@ $(function(){
         if(e.keyCode==13){
             if($('#chatmsg').val()!=''){
             socket.emit('chatmsg',{msg:$('#chatmsg').val(),sender:myname})
-            $('.msgs').append('<blockquote style="width:100%"><p>'+$('#chatmsg').val()+'</p><small>'+myname+'</small></blockquote>')
+            $('.msgs').append('<div style="width:100%;"><label>'+myname+':</label><span>'+$('#chatmsg').val()+'</span></div>')
             }
             $('#chatmsg').val('');
             $('.messages').scrollTop($('.messages')[0].scrollHeight)
@@ -167,7 +167,7 @@ $(function(){
     socket.on('broadmsg',function(data){
         console.log(data);
         $('.msgs').scrollTop(999999999)
-        $('.msgs').append('<blockquote class="pull-right" style="width:100%"><p>'+data.msg+'</p><small>'+data.sender+'</small></blockquote>')
+        $('.msgs').append('<div style="text-align:right;width:100%;"><span>'+data.msg+'</span><label>:'+data.sender+'</label</div>')
     })
     socket.on('game',function(data){
         console.log(data);
