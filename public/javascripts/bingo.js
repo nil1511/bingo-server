@@ -168,7 +168,9 @@ $(function(){
         $('.msgs').scrollTop(999999999)
         $('.msgs').append('<div style="text-align:right;width:100%;"><span>'+data.msg+'</span><label>:'+data.sender+'</label</div>')
     });
-    $('')
+    $('#logout').click(function(){
+            window.location.href='/logout'
+    })
     socket.on('game',function(data){
         console.log(data);
         if(data.status=="game_over")
@@ -183,7 +185,7 @@ $(function(){
     socket.on('disableBtn',function(data){
         console.log(data);
         $('#'+data.btn).attr('disabled','true');
-    })
+    });
     $(document).on('click','.clams',function(){
         switch ($(this).attr('id')) {
             case 'uh':

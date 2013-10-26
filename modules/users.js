@@ -31,3 +31,6 @@ exports.listuser = function(){
     console.log("Listing all Users");
     console.log(user);
 }
+exports.noOfUsers=function(){
+    console.log("No of users online "+Object.keys(user).length);
+}

@@ -56,12 +56,12 @@ app.post('/register',function(req,res){
         res.end(JSON.stringify(successres));
         }
     });
-    console.log(name,pass,email);
+    //console.log(name,pass,email);
 });
 app.post('/checkusername',function(req,res){
     var name = req.body.name;
     db.findOne({"name":name},function(err,result){
-        console.log(err,result);
+        //console.log(err,result);
         if(result==null)
             res.end('0');
         else
@@ -72,19 +72,25 @@ app.post('/login',function(req,res){
     var name = req.body.name;
     var pass = req.body.password;
     db.findOne({"name":name,"password":pass},function(err,result){
-        console.log(err,result);
+        //console.log(err,result);
         if(result==null){
             res.end('0');
         }
         else{
+            console.log("Writing header");
             req.session.user_id=result._id;
-            res.end('1')
+            res.end('1');
         }
     })
+});
+app.get('/logout',function(req,res){
+    console.log("Logingout");
+    req.session.destroy()
+    res.redirect('/');
 })
 function checksession(req,res,next){
     if(req.session.user_id){
-        console.log('Inside checksession');
+        //console.log('Inside checksession');
         users.AddUser(req.session.user_id);
         next();
     }
@@ -116,7 +122,7 @@ function ne(){
             seed=true;
             StartTime =new Date(new Date().getTime()+(5*60*1000));
             gamerunning=false;
-            console.log(numlist,sentNums);
+            //console.log(numlist,sentNums);
             clearInterval(seeder);
             return;
         }
@@ -124,16 +130,17 @@ function ne(){
         num = numlist[ran];
         numlist.splice(ran,1);
         sentNums.push(num);
-        //console.log(sentNums.length);
+        console.log(sentNums.length);
         io.sockets.emit('no', { code: num });
     }
 }
 sessionSockets.on('connection',function(err,socket,session){
-    console.log(StartTime,new Date()> StartTime);
-    console.log("Printing session");
+    //console.log(StartTime,new Date()> StartTime);
+    //console.log("Printing session");
+    console.log(users.noOfUsers());
     if(typeof session=="undefined"){
         console.log("Session Undefined");
-        users.listuser();
+        //users.listuser();
         return;
     }
     if(new Date()<StartTime){
@@ -141,9 +148,9 @@ sessionSockets.on('connection',function(err,socket,session){
     }else{
         socket.emit('welcome',{previousNums:sentNums,yourNum:users.getNum(session.user_id),code:num,game:gamerunning});
     }
-    console.log(users.getNum(session.user_id));
+    //console.log(users.getNum(session.user_id));
     users.setSocket(session.user_id,socket.id)
-    console.log(session,session.user_id);
+    //console.log(session,session.user_id);
     connectionSetup();
     if(seed)
     ne()
@@ -175,7 +182,7 @@ function connectionSetup(){
     if(seed && new Date > StartTime){
         seed=false;
         prepareNumlist(num,maximum);
-        console.log(numlist,sentNums);
+        //console.log(numlist,sentNums);
         seeder= setInterval(ne,ttu*1000);
         console.log("Created Timer");
     }
@@ -204,7 +211,7 @@ function claming(data,socket,session) {i
     var count=0;
     var locallist = data.num;
     var obj = sentNums.slice(0);
-    console.log(locallist);
+    //console.log(locallist);
     if(locallist.length==0||obj.length==0||checklist[data.clams]>locallist.length)
         return false;
     for(var i=initial[data.clams];i<locallist.length && i<checklist[data.clams];i++){
@@ -214,7 +221,7 @@ function claming(data,socket,session) {i
                 break
             }
         }
-        console.log(j+" After for loop")
+        //console.log(j+" After for loop")
         if(j==obj.length){
             console.log("False Clams");
             return false;
@@ -223,7 +230,7 @@ function claming(data,socket,session) {i
     io.sockets.emit('disableBtn',{btn:data.clams});
     //console.log(session);
     db.findOne({_id: DB.ObjectID(session.user_id)},function(err,row){
-        console.log("Finding Winners Name");
+        console.log("Winner Name for "+data.clams+" is "+row.name);
         io.sockets.emit('result',{clam:data.clams,name:row.name})
     })
     socket.emit('game',{status:"running"});
