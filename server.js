@@ -101,7 +101,7 @@ function checksession(req,res,next){
 app.get('/bingo',checksession,routes.bingo);
 
 var maximum =100;
-var StartTime =new Date(2013,9,25,19,47,0,0);
+var StartTime =new Date(2013,9,26,15,02,0,0);
 var sentNums = [];
 var num=Math.floor(Math.random()*maximum+1);
 var updatetimeStamp=new Date();
@@ -197,17 +197,17 @@ function prepareNumlist(num,maximum){
     return;
 }
 function socketdisconnect(){
-    var a=io.sockets.clients();
-    if(Object.keys(io.connected).length==1){
-        clearInterval(seeder);
-        seed= true;
-        console.log("Cleared Interval");
-    }
+    //var a=io.sockets.clients();
+    //if(Object.keys(io.connected).length==1){
+        //clearInterval(seeder);
+        //seed= true;
+        //console.log("Cleared Interval");
+    //}
     //console.log("disconnected",Object.keys(io.connected).length,numlist);
 }
 var checklist = {'uh':15,'fh':25,'lh':25},initial={'lh':11,'uh':0,'fh':0};
 //Disabled count Check counts = {'uh':15,'lh':15,'fh':25};
-function claming(data,socket,session) {i
+function claming(data,socket,session){
     var count=0;
     var locallist = data.num;
     var obj = sentNums.slice(0);
