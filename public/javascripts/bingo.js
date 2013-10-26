@@ -78,8 +78,6 @@ $(function(){
         if($(this).hasClass('btn-danger'))
             return;
         socket.emit('startgame');
-        //$('.instruction').hide();
-        //$('.game').show();
    })
    socket.on('gamestarted',function(){
         $('.instruction').hide();
@@ -155,9 +153,10 @@ $(function(){
         }
     });
     $('.ch').click(function(){
-        $('.messages').slideUp();
+        $('.messages').slideUp('slow',function(){
+            $('.openchat').show();
+        });
         $('.transmission').slideUp('fast');
-        $('.openchat').show();
     });
     $('.openchat').click(function(){
         $('.openchat').hide();
