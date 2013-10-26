@@ -59,14 +59,14 @@ $(function(){
         //console.log($('#previousdeclaredNum').html());
         $('#previousdeclaredNum').html(previousNums[0])
         if(data.game){
-            $('.prenums').html('Numbers Declared when you were not online you have '+(previousNums.length*5) +' seconds to fill them');
+            $('.prenums').html('Numbers Declared when you were not online you have 30 seconds to fill them');
         for(var i=1;i<previousNums.length;i++){
             $('#previousdeclaredNum').html($('#previousdeclaredNum').html()+","+previousNums[i])
         }
         setTimeout(function(){
             previousClamable=false;
             $('#previousdeclaredNum').css('color','red');
-        },5000*previousNums.length);
+        },1000*30);
         $('#allNum').html($('#previousdeclaredNum').html())
         }
         else{
@@ -153,22 +153,23 @@ $(function(){
             $('#chatmsg').val('');
             $('.messages').scrollTop($('.messages')[0].scrollHeight)
         }
-    })
+    });
     $('.ch').click(function(){
         $('.messages').slideUp();
         $('.transmission').slideUp('fast');
         $('.openchat').show();
-    })
+    });
     $('.openchat').click(function(){
         $('.openchat').hide();
         $('.messages').slideDown();
         $('.transmission').slideDown('fast');
-    })
+    });
     socket.on('broadmsg',function(data){
         console.log(data);
         $('.msgs').scrollTop(999999999)
         $('.msgs').append('<div style="text-align:right;width:100%;"><span>'+data.msg+'</span><label>:'+data.sender+'</label</div>')
-    })
+    });
+    $('')
     socket.on('game',function(data){
         console.log(data);
         if(data.status=="game_over")
