@@ -34,3 +34,10 @@ exports.listuser = function(){
 exports.noOfUsers=function(){
     console.log("No of users online "+Object.keys(user).length);
 }
+exports.notExist=function(id){
+    //console.log("Checking whether user exist or not",user[id]);
+    if(typeof user[id]=="undefined")
+        return true;
+    else
+        return false;
+}

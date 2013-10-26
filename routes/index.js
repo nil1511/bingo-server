@@ -7,9 +7,11 @@ exports.index = function(req, res){
   res.render('index', { title: 'Bingo',page:'index' });
 };
 exports.bingo = function(req,res){
-    var number = getBingoCard(1,100,25);
-    users.setNum(req.session.user_id,number);
-    //users.listuser();
+    var number=users.getNum(req.session.user_id);
+    if(number==null){
+        number = getBingoCard(1,100,25)
+        users.setNum(req.session.user_id,number);
+    }
     res.render('bingo',{page:'bingo',number:number});
 }
 function getBingoCard(min,max,no){

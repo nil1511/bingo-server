@@ -91,7 +91,8 @@ app.get('/logout',function(req,res){
 function checksession(req,res,next){
     if(req.session.user_id){
         //console.log('Inside checksession');
-        users.AddUser(req.session.user_id);
+        if(users.notExist(req.session.user_id))
+            users.AddUser(req.session.user_id);
         next();
     }
     else{
