@@ -34,6 +34,20 @@ exports.listuser = function(){
 exports.noOfUsers=function(){
     console.log("No of users online "+Object.keys(user).length);
 }
+exports.clickNum=function(id,number,list){
+    if(typeof list != "undefined" && list && user[id].clickNums){
+        return user[id].clickNums;
+    }
+    else if(typeof number != "undefined"){
+        if(typeof user[id].clickNums == "undefined")
+            user[id]['clickNums']=[];
+        return user[id]['clickNums'][user[id].clickNums.length]=parseInt(number);
+    }
+    else if(typeof user[id].clickNums!= "undefined")
+        return user[id].clickNums;
+    else
+        return null;
+}
 exports.notExist=function(id){
     //console.log("Checking whether user exist or not",user[id]);
     if(typeof user[id]=="undefined")

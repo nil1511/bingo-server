@@ -34,19 +34,19 @@ $(function(){
         performClick(this)
     })
     function performClick(cell){
-        console.log("Click"+cell);
-       var clickNum = $(cell).children('b').html();
-       var idno = parseInt($(cell).attr('id').split('cell')[1]);
+        //console.log("Click"+cell);
+        var clickNum = $(cell).children('b').html();
+        var idno = parseInt($(cell).attr('id').split('cell')[1]);
         --idno;
         console.log(idno);
         numobj[idno]=parseInt(clickNum);
         //if($(cell).css('background-color')=='')
         $(cell).css('background-color','rgb(41, 128, 185)')
-         console.log(numobj);
+        socket.emit('clicknum',{number:clickNum});
+        console.log(numobj);
     }
     var socket = io.connect();
     var localnums=[];
-    var myNum=[] ;
     var previousNums=[];
     socket.on('whoami',function(data){
         myname=data.name;
@@ -54,7 +54,14 @@ $(function(){
     })
     socket.on('welcome',function(data){
         console.log(data);
-        myNum= data.yourNum;
+        if(clicks)
+        for(var i=0;i<clicks.length;i++){
+           var c= myNum.indexOf(clicks[i]);
+            if(c+1){
+                $('#cell'+(c+1)).css('background-color','rgb(41, 128, 185)')
+
+            }
+        }
         previousNums=data.previousNums;
         //console.log($('#previousdeclaredNum').html());
         $('#previousdeclaredNum').html(previousNums[0])

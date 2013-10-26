@@ -18,6 +18,9 @@ block content
                 div Previous Nums 
                     label#pre 0,0
             .game.card
+                script
+                    var clicks= !{JSON.stringify(clicked)}
+                    var myNum=!{JSON.stringify(number)}
                 table.table.table-bordered
                     -for(var i=0;i<25;i++){
                        -if(i%5==0){

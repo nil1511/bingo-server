@@ -107,7 +107,7 @@ var sentNums = [];
 var num=Math.floor(Math.random()*maximum+1);
 var updatetimeStamp=new Date();
 var seed=true;
-var ttu=15;//time to update
+var ttu=2;//time to update
 var numlist=[];
 var seeder;
 var uh,fh,lh;
@@ -170,7 +170,9 @@ sessionSockets.on('connection',function(err,socket,session){
     db.findOne({_id: DB.ObjectID(session.user_id)},function(err,row){
         socket.emit('whoami',{name:row.name})
     })
-
+    socket.on('clicknum',function(data){
+        users.clickNum(session.user_id,data.number)
+    })
     socket.on('disconnect',socketdisconnect);
     socket.on('clam',function(data){
         claming(data,socket,session);
@@ -198,12 +200,12 @@ function prepareNumlist(num,maximum){
     return;
 }
 function socketdisconnect(){
-    var a=io.sockets.clients();
-    if(Object.keys(io.connected).length==1){
-        clearInterval(seeder);
-        seed= true;
-        console.log("Cleared Interval");
-    }
+    //var a=io.sockets.clients();
+    //if(Object.keys(io.connected).length==1){
+        //clearInterval(seeder);
+        //seed= true;
+        //console.log("Cleared Interval");
+    //}
     //console.log("disconnected",Object.keys(io.connected).length,numlist);
 }
 var checklist = {'uh':15,'fh':25,'lh':25},initial={'lh':11,'uh':0,'fh':0};

@@ -7,12 +7,18 @@ exports.index = function(req, res){
   res.render('index', { title: 'Bingo',page:'index' });
 };
 exports.bingo = function(req,res){
-    var number=users.getNum(req.session.user_id);
+    var number=users.getNum(req.session.user_id),clickNum=null;
     if(number==null){
         number = getBingoCard(1,100,25)
         users.setNum(req.session.user_id,number);
     }
-    res.render('bingo',{page:'bingo',number:number});
+    else{
+        clickNum=users.clickNum(req.session.user_id,undefined,true);
+        console.log("Clicked",clickNum);
+        if(clickNum)
+        console.log("length",clickNum.length);
+    }
+    res.render('bingo',{page:'bingo',number:number,clicked:clickNum});
 }
 function getBingoCard(min,max,no){
     var ob={};
