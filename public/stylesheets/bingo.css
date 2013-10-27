@@ -35,18 +35,11 @@ td.num{
 #clambuttons{
     text-align:center;
 }
-.sel{
-    background-color:green;
-}
 .card{
     float:right;
 }
 #result{
     width:100% !important;
-}
-.samplecard{
-    display:inline-block;
-    margin-right:10px;
 }
 .help{
     text-align:center;

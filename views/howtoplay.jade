@@ -1,0 +1,51 @@
+extends layout
+block content
+    .header.nav-header
+        h1= title
+    .container
+        h3(style="text-align:center") How to Play
+        p.
+            After logging in, each player will get a unique ticket (5 x 5 matrix). There will be 100 numbers (random generated), These numbers will be displayed. Each number will be displayed for 10 seconds followed by the next number.
+            <br><br>
+            If the number displayed matches a number on the ticket, the player must click on that number of the ticket. 
+            <br><br>
+            All the previous numbers can be seen from the "Previously displayed number list".<br><br>
+            There are 3 types of claims: <br>
+        .samplecards(style="text-align:center")
+            .samplecard
+                table.table.table-bordered
+                    -for(var i=0;i<25;i++){
+                    -if(i%5==0){
+                    tr
+                    -}
+                        -if(i<15){
+                        td.sel #{i+1}
+                        -}
+                        -else{
+                        td #{i+1}
+                    -}}
+                p Upper House (Top 3 x 5)
+            .samplecard
+                table.table.table-bordered
+                    -for(var i=0;i<25;i++){
+                    -if(i%5==0){
+                    tr
+                    -}
+                        td.sel #{i+1}
+                    -}
+                p Full House (All 5 x 5)
+            .samplecard
+                table.table.table-bordered
+                    -for(var i=0;i<25;i++){
+                    -if(i%5==0){
+                    tr
+                    -}
+                    -if(i>9){
+                        td.sel #{i+1}
+                    -}
+                    -else{
+                        td #{i+1}
+                    -}}
+                p Lower House (Lower 3 x 5)
+        p.
+            <br>Once a claim is made, this claim will be disabled uptill the next round. eg. Player XYZ claims Upper house in the Round 4, then no other player can claim Upper House in Round 4 but still the other 2 claims (Full House and Lower House are unclaimed).

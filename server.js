@@ -100,6 +100,7 @@ function checksession(req,res,next){
     }
 }
 app.get('/bingo',checksession,routes.bingo);
+app.get('/how',routes.how);
 
 var maximum =100;
 var StartTime =new Date(2013,9,26,21,00,0,0);

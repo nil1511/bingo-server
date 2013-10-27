@@ -1,0 +1,12 @@
+.header h1{
+    margin:0;
+    padding:10px 0 10px 0px;
+}
+.samplecard{
+    display:inline-block;
+    margin-right:10px;
+}
+.sel{
+    background-color:green;
+}
+

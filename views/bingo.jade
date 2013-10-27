@@ -7,7 +7,7 @@ block content
                 li.active
                     a Game
                 li
-                    a How to play
+                    a(href="/how",target="_blank") How to play
                 li
                     a Quick play
                 li#logout
@@ -52,44 +52,8 @@ block content
                 tr
                     td Lower House
                     td#lhname
-       
     .container.help
-        .samplecard
-            table.table.table-bordered
-                -for(var i=0;i<25;i++){
-                -if(i%5==0){
-                tr
-                -}
-                    -if(i<15){
-                    td.sel #{i+1}
-                    -}
-                    -else{
-                    td #{i+1}
-                -}}
-            p upperhouse
-        .samplecard
-            table.table.table-bordered
-                -for(var i=0;i<25;i++){
-                -if(i%5==0){
-                tr
-                -}
-                    td.sel #{i+1}
-                -}
-            p fullhouse
-        .samplecard
-            table.table.table-bordered
-                -for(var i=0;i<25;i++){
-                -if(i%5==0){
-                tr
-                -}
-                -if(i>9){
-                    td.sel #{i+1}
-                -}
-                -else{
-                    td #{i+1}
-                -}}
-            p lowerhouse
-        .chat.col-md-5
+       .chat.col-md-5
             .prenums Number Declared when you were not online you have 30 sec to click any of these numbers
             p#previousdeclaredNum
             label.allNum All Number Declared uptill Now

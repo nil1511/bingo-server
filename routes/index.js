@@ -20,6 +20,9 @@ exports.bingo = function(req,res){
     }
     res.render('bingo',{page:'bingo',number:number,clicked:clickNum});
 }
+exports.how= function(req,res){
+    res.render('howtoplay',{title:'Bingo',page:'how'});
+}
 function getBingoCard(min,max,no){
     var ob={};
     var number = [];
