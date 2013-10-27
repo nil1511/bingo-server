@@ -73,7 +73,14 @@ td.num{
 ul.nav.menu li a{
     color:#fff !important;
 }
-ul.nav.menu li:hover{
+#gameover{
+    color:red;
+}
+.msg{
+    background:#16A085;
+    font-size:large;
+}
+ul.nav.menu li.clickable:hover{
     background:#2C3E50;
 }
 ul.nav.menu li.active a{
