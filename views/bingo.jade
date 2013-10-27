@@ -2,15 +2,21 @@ extends layout
 block content
     nav.navbar.navbar-default.header
         .collapse.navbar-collapse.navbar-ex1-collapse
-            label The Event will start 27/10/13 10:00PM IST
-            ul.nav.navbar-nav.navbar-right.menu
-                li.active
-                    a Game
+            ul.nav.navbar-nav.navbar-left.menu
                 li
+                    a The Event will start 27/10/13 10:00PM IST
+                li.msg
+                    a Round 
+                        span.roundnum  
+                        span  of 10
+            ul.nav.navbar-nav.navbar-right.menu
+                li.active.clickable
+                    a Game
+                li.clickable
                     a(href="/how",target="_blank") How to play
                 li
                     a #{name}
-                li#logout
+                li#logout.clickable
                     a Logout
     .container
         label#gameover
@@ -32,16 +38,17 @@ block content
                     -}
         .col-md-2#clambuttons.game
             label Claim Here
+            button.btn.btn-danger.clams#fh(type='button') Full House
             button.btn.btn-danger.clams#uh(type='button') Upper House
-            button.btn.btn-danger.clams#lh(type='button') lower house
-            button.btn.btn-danger.clams#fh(type='button') full house
+            button.btn.btn-danger.clams#lh(type='button') Lower House
         .col-md-7.instruction
             p#howtoplay
             label#time 
             br
             button.btn.btn-danger#letsplay Lets Play
         .col-md-3
-            label Results
+            label Results of Round 
+                span.roundnum 
             table.table.table-condensed#result
                 tr
                     td Full House

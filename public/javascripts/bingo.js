@@ -38,8 +38,12 @@ $(function(){
     //var socket = io.connect('http://127.0.0.1:3000');
     var localnums=[];
     var ano=0;
+    socket.on('newgame',function(){
+    setTimeout(function(){
+        window.location.href='/bingo';
+        },5000);
+    })
     socket.on('welcome',function(data){
-        //console.log(data);
         if(clicks)
         numobj=clicks
         if(clicks)
@@ -49,12 +53,22 @@ $(function(){
                 $('#cell'+(c+1)).css('background-color','rgb(41, 128, 185)')
             }
         }
+        if(data.round)
+            $('.roundnum').html(data.round)
         allNum=data.previousNums;
-        console.log(allNum);
+        //console.log(allNum);
         if(data.game){
             for(var i=0;i<allNum.length;i++,ano++){
             $('#an'+(i)).html(allNum[i]);
             }
+        }
+        console.log(data);
+        if(data.winner)
+        for(var k in data.winner){
+            $('#'+k+'name').html(data.winner[k]);
+            $('#'+k).attr('disabled','true');
+            if(data.winner[k]==myname)
+                $('.clams').attr('disabled','true')
         }
         showNum(data);
     })
@@ -148,7 +162,7 @@ $(function(){
     });
     $('#logout').click(function(){
             window.location.href='/logout'
-    })
+    });
     socket.on('game',function(data){
         console.log(data);
         if(data.status=="game_over"){

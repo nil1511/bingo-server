@@ -109,10 +109,11 @@ var sentNums = [];
 var num=Math.floor(Math.random()*maximum+1);
 var updatetimeStamp=new Date();
 var seed=true;
-var ttu=0.5;//time to update
+var ttu=6;//time to update
 var numlist=[];
 var seeder;
 var winner  = {};
+var round=1;
 var uh,fh,lh;
 var gamerunning= true;
 function ne(){
@@ -137,6 +138,7 @@ function ne(){
 }
 function resultDecleared(){
     seed=true;
+    round++;
     users.clearCard();
     StartTime =new Date(new Date().getTime()+(1*10*1000));
     gamerunning=false;
@@ -158,9 +160,9 @@ sessionSockets.on('connection',function(err,socket,session){
          //socket.emit('welcome',{previousNums:sentNums,code:num,game:gamerunning});
             //else
         if(gamerunning)
-            socket.emit('welcome',{previousNums:sentNums,code:num,game:gamerunning});
+            socket.emit('welcome',{previousNums:sentNums,code:num,game:gamerunning,winner:winner,round:round});
         else
-            socket.emit('welcome',{previousNums:0,code:00,game:gamerunning});
+            socket.emit('welcome',{previousNums:0,code:00,game:gamerunning,winner:winner,round:round});
     }
     //console.log(users.getNum(session.user_id));
     users.setSocket(session.user_id,socket.id)
@@ -176,7 +178,7 @@ sessionSockets.on('connection',function(err,socket,session){
             io.sockets.emit('gamestarted')
         }
         if(new Date()> StartTime){
-        socket.emit('welcome',{previousNums:sentNums,code:num,game:gamerunning});
+        socket.emit('welcome',{previousNums:sentNums,code:num,game:gamerunning,winner:winner,round:round});
         }
     })
     socket.on('clicknum',function(data){
@@ -191,7 +193,7 @@ sessionSockets.on('connection',function(err,socket,session){
     })
 })
 function connectionSetup(){
-    if(seed && new Date > StartTime){
+    if(seed && new Date > StartTime&&round<11){
         seed=false;
         gamerunning=true;
         prepareNumlist(num,maximum);
