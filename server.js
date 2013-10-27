@@ -123,10 +123,6 @@ function ne(){
         if(numlist.length==0 || Object.keys(winner).length==3){
             console.log("Game over");
             io.sockets.emit('game',{status:"game_over"});
-            seed=true;
-            StartTime =new Date(new Date().getTime()+(1*10*1000));
-            gamerunning=false;
-            users.clearCard();
             //console.log(numlist,sentNums);
             clearInterval(seeder);
             return;
@@ -138,6 +134,13 @@ function ne(){
         console.log(sentNums.length);
         io.sockets.emit('no', { code: num });
     }
+}
+function resultDecleared(){
+    seed=true;
+    users.clearCard();
+    StartTime =new Date(new Date().getTime()+(1*10*1000));
+    gamerunning=false;
+    io.sockets.emit('newgame');
 }
 sessionSockets.on('connection',function(err,socket,session){
     //console.log(StartTime,new Date()> StartTime);
@@ -243,6 +246,10 @@ function claming(data,socket,session){
     db.findOne({_id: DB.ObjectID(session.user_id)},function(err,row){
         console.log("Winner Name for "+data.clams+" is "+row.name);
         winner[data.clam]=row.name;
+        if(Object.keys(winner).length==3){
+            resultDecleared();
+        }
+        console.log(Object.keys(winner).length);
         io.sockets.emit('result',{clam:data.clams,name:row.name})
     })
     socket.emit('game',{status:"running"});
