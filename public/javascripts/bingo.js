@@ -1,34 +1,24 @@
 $(function(){
     var numobj=[];
-    var previousNum=[0,0];
-    var previousClamable= true;
+    var allNum=[]
     if(navigator.userAgent.search('Chrome')+1){
         $('.card td').css('background','#FC9C21')
-        console.log("You are using  chrome");
+        //console.log("You are using  chrome");
     }else if(navigator.userAgent.search('Firefox')+1){
         $('.card td').css('background','green')
-        console.log("You are using Firefox");
+        //console.log("You are using Firefox");
     }
     $('.num').click(function(e){
-        console.log($(this).children('b').html());
+        //console.log($(this).children('b').html());
         var clickNum = $(this).children('b').html();
         if(clickNum!=$('#generator').html()){
-            if(clickNum!=previousNum[1])
-                if(clickNum!=previousNum[0])
-                {
-                    if(previousNums.length!=0&&previousClamable){
-                        for(var i=0;i<previousNums.length;i++){
-                            if(previousNums[i]==clickNum){
-                                performClick(this)
-                                return false;
-                            }
-                        }
-                        return false;
-                    }
-                    else {
-                        return false;
+            for(var i=0;i<allNum.length;i++){
+                if(allNum[i]==clickNum){
+                    performClick(this)
+                    return false;
                     }
                 }
+            return false;
         }
         performClick(this)
     })
@@ -47,7 +37,6 @@ $(function(){
     var socket = io.connect();
     //var socket = io.connect('http://127.0.0.1:3000');
     var localnums=[];
-    var previousNums=[];
     var ano=0;
     socket.on('welcome',function(data){
         //console.log(data);
@@ -59,24 +48,12 @@ $(function(){
 
             }
         }
-        previousNums=data.previousNums;
-        console.log(previousNums);
-        $('#previousdeclaredNum').html(previousNums[0])
-        if(data.game && !clicks){
-            if(previousdeclaredNum.length==0)
-            $('.prenums').show().html('Numbers Declared when you were not online.<br>You have 60 seconds to fill them');
-        for(var i=1;i<previousNums.length;i++,ano++){
-            $('#an'+(i-1)).html(previousNums[i-1]);
-            $('#previousdeclaredNum').show().html($('#previousdeclaredNum').html()+","+previousNums[i])
-        }
-        setTimeout(function(){
-            previousClamable=false;
-            $('#previousdeclaredNum').css('color','red');
-        },5000*12);
-        $('#allNum').html($('#previousdeclaredNum').html())
-        }
-        else if(!clicks){
-            $("#previousdeclaredNum").show().html("Sorry,Game is Over")
+        allNum=data.previousNums;
+        console.log(allNum);
+        if(data.game){
+            for(var i=0;i<allNum.length;i++,ano++){
+            $('#an'+(i)).html(allNum[i]);
+            }
         }
         showNum(data);
     })
@@ -124,12 +101,11 @@ $(function(){
     socket.on('no',showNum)
     function showNum(num){
         //console.log(num.code,arguments);
-        previousNum[0]=previousNum[1];
-        previousNum[1]=parseInt($('#generator').html())
-        $('#pre').html(previousNum[0]+","+previousNum[1])
-            //var cstring = $('#allNum').html();
-            //var nu = cstring.substring(1+cstring.lastIndexOf(','));
+        if(allNum[allNum.length-1]!=num.code){
             $('#an'+(ano++)).html(num.code);
+            allNum[allNum.length]=num.code;
+        }
+        //console.log(allNum);
         $('#generator').html(num.code)
         //for(var i=0;i<25;i++){
             //if(myNum[i]==num.code)

@@ -15,7 +15,7 @@ var connect = require('connect'),
 var app = express()
     ,http = require('http')
 // all environments
-app.set('port', process.env.PORT || 3000);
+app.set('port', process.env.PORT || 80);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 app.use(express.favicon());
@@ -109,7 +109,7 @@ var sentNums = [];
 var num=Math.floor(Math.random()*maximum+1);
 var updatetimeStamp=new Date();
 var seed=true;
-var ttu=10;//time to update
+var ttu=5;//time to update
 var numlist=[];
 var seeder;
 var uh,fh,lh;
@@ -123,8 +123,9 @@ function ne(){
             console.log("Game over");
             io.sockets.emit('game',{status:"game_over"});
             seed=true;
-            StartTime =new Date(new Date().getTime()+(2*60*1000));
+            StartTime =new Date(new Date().getTime()+(1*10*1000));
             gamerunning=false;
+            //users.clearCard();
             //console.log(numlist,sentNums);
             clearInterval(seeder);
             return;
@@ -155,7 +156,7 @@ sessionSockets.on('connection',function(err,socket,session){
         if(gamerunning)
             socket.emit('welcome',{previousNums:sentNums,code:num,game:gamerunning});
         else
-            socket.emit('welcome',{previousNums:sentNums,code:00,game:gamerunning});
+            socket.emit('welcome',{previousNums:0,code:00,game:gamerunning});
     }
     //console.log(users.getNum(session.user_id));
     users.setSocket(session.user_id,socket.id)
@@ -188,6 +189,7 @@ sessionSockets.on('connection',function(err,socket,session){
 function connectionSetup(){
     if(seed && new Date > StartTime){
         seed=false;
+        gamerunning=true;
         prepareNumlist(num,maximum);
         //console.log(numlist,sentNums);
         seeder= setInterval(ne,ttu*1000);
@@ -201,6 +203,7 @@ function prepareNumlist(num,maximum){
     }
     numlist.splice(num-1,1);
     sentNums.push(num);
+    //users.clearCard();
     return;
 }
 function socketdisconnect(){
@@ -246,4 +249,4 @@ function claming(data,socket,session){
     console.log('Clam ' +data.clams+' has been won');
     //console.log(data,socket,session);
 }
-server.listen(3000);
+server.listen(80);

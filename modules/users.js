@@ -42,6 +42,12 @@ exports.listuser = function(){
 exports.noOfUsers=function(){
     console.log("No of users in memory "+Object.keys(user).length);
 }
+exports.clearCard = function(){
+    for(var u in user){
+        u['clickNums']=null;
+        u['num']=null;
+    }
+}
 exports.clickNum=function(id,number,list){
     if(typeof list != "undefined" && list && user[id].clickNums){
         return user[id].clickNums;

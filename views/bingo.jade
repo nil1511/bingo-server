@@ -16,8 +16,6 @@ block content
         .col-md-5.game
             div.precont
                 p#generator 00
-                div Previous Nums 
-                    label#pre 0,0
             .game.card
                 script
                     var clicks= !{JSON.stringify(clicked)}
@@ -55,10 +53,7 @@ block content
                     td#lhname
     .container.help
        .chat.col-md-5
-            .prenums Number Declared when you were not online you have 30 sec to click any of these numbers
-            p#previousdeclaredNum
             label.allNum All Number Declared uptill Now
-            -//p#allNum
             table.allNum.table.table-condensed
                 -for(var i=0,k=0;i<5;i++){
                     tr
