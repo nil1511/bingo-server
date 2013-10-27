@@ -115,7 +115,7 @@ var ttu=6;//time to update
 var numlist=[];
 var seeder;
 var winner  = {};
-var round=1;
+var round=0;
 var uh,fh,lh;
 var gamerunning= true;
 function ne(){

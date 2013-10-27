@@ -63,6 +63,9 @@ td.num{
 .instruction,.messages,.transmission{
     display:none;
 }
+.instruction{
+    text-align:center;
+}
 .messages{
     height:350px;
     overflow-y:auto;
