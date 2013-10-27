@@ -45,7 +45,7 @@ $(function(){
         //console.log(numobj);
     }
     var socket = io.connect();
-    var socket = io.connect('http://127.0.0.1:3000');
+    //var socket = io.connect('http://127.0.0.1:3000');
     var localnums=[];
     var previousNums=[];
     var ano=0;

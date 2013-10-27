@@ -4,6 +4,12 @@
  */
 var users= require('../modules/users')
 exports.index = function(req, res){
+    if(req.session && typeof req.session.user_id != "undefined"){
+        console.log("Users seems to be already Logged in ");
+        //res.redirect('/bingo');
+        //bingo(req,res)
+        console.log(res);
+    }
   res.render('index', { title: 'Bingo',page:'index' });
 };
 exports.bingo = function(req,res){

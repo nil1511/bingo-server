@@ -93,7 +93,7 @@ app.get('/logout',function(req,res){
 })
 function checksession(req,res,next){
     if(req.session.user_id){
-        //console.log('Inside checksession');
+        console.log('Inside checksession');
         next();
     }
     else{
@@ -152,7 +152,10 @@ sessionSockets.on('connection',function(err,socket,session){
          //if(users.getNum(session.user_id))
          //socket.emit('welcome',{previousNums:sentNums,code:num,game:gamerunning});
             //else
-        socket.emit('welcome',{previousNums:sentNums,code:num,game:gamerunning});
+        if(gamerunning)
+            socket.emit('welcome',{previousNums:sentNums,code:num,game:gamerunning});
+        else
+            socket.emit('welcome',{previousNums:sentNums,code:00,game:gamerunning});
     }
     //console.log(users.getNum(session.user_id));
     users.setSocket(session.user_id,socket.id)
