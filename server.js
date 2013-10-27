@@ -100,11 +100,13 @@ function checksession(req,res,next){
         res.render('index', { title: 'Bingo',page:'index' });
     }
 }
-app.get('/bingo',checksession,routes.bingo);
+app.get('/bingo',checksession,function(req,res){
+    routes.bingo(req,res,round)
+});
 app.get('/how',routes.how);
 
 var maximum =100;
-var StartTime =new Date(2013,9,26,21,00,0,0);
+var StartTime =new Date(2013,9,27,22,00,0,0);
 var sentNums = [];
 var num=Math.floor(Math.random()*maximum+1);
 var updatetimeStamp=new Date();

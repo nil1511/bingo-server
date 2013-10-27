@@ -7,8 +7,10 @@ block content
                     a The Event will start 27/10/13 10:00PM IST
                 li.msg
                     a Round 
-                        span.roundnum  
+                        span.roundnum  #{round}
                         span  of 10
+                li
+                    a#mess
             ul.nav.navbar-nav.navbar-right.menu
                 li.active.clickable
                     a Game
@@ -48,7 +50,7 @@ block content
             button.btn.btn-danger#letsplay Lets Play
         .col-md-3.pull-right
             label Results of Round 
-                span.roundnum 
+                span.roundnum #{round}
             table.table.table-condensed#result
                 tr
                     td Full House

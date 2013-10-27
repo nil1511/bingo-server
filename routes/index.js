@@ -12,7 +12,7 @@ exports.index = function(req, res){
     }
   res.render('index', { title: 'Bingo',page:'index' });
 };
-exports.bingo = function(req,res){
+exports.bingo = function(req,res,round){
     var number=users.getNum(req.session.user_id),clickNum=null;
     var name = users.getName(req.session.user_id);
     if(number==null){
@@ -25,7 +25,8 @@ exports.bingo = function(req,res){
         if(clickNum)
         console.log("length",clickNum.length);
     }
-    res.render('bingo',{page:'bingo',number:number,clicked:clickNum,name:name});
+    console.log(round);
+    res.render('bingo',{page:'bingo',number:number,clicked:clickNum,name:name,round:round});
 }
 exports.how= function(req,res){
     res.render('howtoplay',{title:'Bingo',page:'how'});

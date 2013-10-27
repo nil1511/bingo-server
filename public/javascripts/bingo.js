@@ -39,6 +39,7 @@ $(function(){
     var localnums=[];
     var ano=0;
     socket.on('newgame',function(){
+        $('#mess').html('All the claims for this round are done,Please wait for 5 sec');
     setTimeout(function(){
         window.location.href='/bingo';
         },5000);
@@ -98,7 +99,7 @@ $(function(){
                     return;
                 }
                 //console.log(ctime,time,tt);
-                $('#time').html("Game Starts in "+tt.h+" hours "+tt.m+" mins "+tt.s+" seconds")
+                $('#time').html("Next Round starts in "+tt.h+" hours "+tt.m+" mins "+tt.s+" seconds")
             },1000)
         }
         //console.log(data);
@@ -122,10 +123,10 @@ $(function(){
         }
         //console.log(allNum);
         $('#generator').html(num.code)
-        for(var i=0;i<25;i++){
-            if(myNum[i]==num.code)
-                $('#cell'+(i+1)).trigger('click');
-        }
+        //for(var i=0;i<25;i++){
+            //if(myNum[i]==num.code)
+                //$('#cell'+(i+1)).trigger('click');
+        //}
 
         localnums.push(num.code);
     }
@@ -166,7 +167,7 @@ $(function(){
     socket.on('game',function(data){
         console.log(data);
         if(data.status=="game_over"){
-            $('#gameover').html('Game Over but you can clam unclamed houses')
+            $('#gameover').html('Round over but you can claim unclaimed houses')
             //alert('Game Over but you can clam unclamed houses');
         }
         if(data.status=="running"){
