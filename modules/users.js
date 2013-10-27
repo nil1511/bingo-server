@@ -43,9 +43,10 @@ exports.noOfUsers=function(){
     console.log("No of users in memory "+Object.keys(user).length);
 }
 exports.clearCard = function(){
+    console.log("Clearing Users List");
     for(var u in user){
-        u['clickNums']=null;
-        u['num']=null;
+        user[u].clickNums=undefined;
+        user[u].num=undefined;
     }
 }
 exports.clickNum=function(id,number,list){

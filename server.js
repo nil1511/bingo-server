@@ -109,9 +109,10 @@ var sentNums = [];
 var num=Math.floor(Math.random()*maximum+1);
 var updatetimeStamp=new Date();
 var seed=true;
-var ttu=5;//time to update
+var ttu=0.5;//time to update
 var numlist=[];
 var seeder;
+var winner  = {};
 var uh,fh,lh;
 var gamerunning= true;
 function ne(){
@@ -125,7 +126,6 @@ function ne(){
             seed=true;
             StartTime =new Date(new Date().getTime()+(1*10*1000));
             gamerunning=false;
-            //users.clearCard();
             //console.log(numlist,sentNums);
             clearInterval(seeder);
             return;
@@ -191,6 +191,8 @@ function connectionSetup(){
         seed=false;
         gamerunning=true;
         prepareNumlist(num,maximum);
+        winner={};
+        users.clearCard();
         //console.log(numlist,sentNums);
         seeder= setInterval(ne,ttu*1000);
         console.log("Created Timer");
@@ -216,7 +218,6 @@ function socketdisconnect(){
     //console.log("disconnected",Object.keys(io.connected).length,numlist);
 }
 var checklist = {'uh':15,'fh':25,'lh':25},initial={'lh':11,'uh':0,'fh':0};
-var winner  = {};
 //Disabled count Check counts = {'uh':15,'lh':15,'fh':25};
 function claming(data,socket,session){
     var count=0;
