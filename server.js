@@ -250,6 +250,9 @@ function claming(data,socket,session){
     db.findOne({_id: DB.ObjectID(session.user_id)},function(err,row){
         console.log("Winner Name for "+data.clams+" is "+row.name);
         winner[data.clams]=row.name;
+        db.save({'result':data.clams,'round':round,'name':row.name},function(result){
+            console.log(result);
+        });
         if(Object.keys(winner).length==3){
             resultDecleared();
         }
