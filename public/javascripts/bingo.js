@@ -41,11 +41,12 @@ $(function(){
     socket.on('welcome',function(data){
         //console.log(data);
         if(clicks)
+        numobj=clicks
+        if(clicks)
         for(var i=0;i<clicks.length;i++){
            var c= myNum.indexOf(clicks[i]);
             if(c+1){
                 $('#cell'+(c+1)).css('background-color','rgb(41, 128, 185)')
-
             }
         }
         allNum=data.previousNums;
@@ -150,8 +151,10 @@ $(function(){
     })
     socket.on('game',function(data){
         console.log(data);
-        if(data.status=="game_over")
-            alert('Game Over but you can clam unclamed houses');
+        if(data.status=="game_over"){
+            $('#gameover').html('Game Over but you can clam unclamed houses')
+            //alert('Game Over but you can clam unclamed houses');
+        }
         if(data.status=="running"){
             $('.clams').attr('disabled','true');
         }

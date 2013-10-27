@@ -245,11 +245,11 @@ function claming(data,socket,session){
     //console.log(session);
     db.findOne({_id: DB.ObjectID(session.user_id)},function(err,row){
         console.log("Winner Name for "+data.clams+" is "+row.name);
-        winner[data.clam]=row.name;
+        winner[data.clams]=row.name;
         if(Object.keys(winner).length==3){
             resultDecleared();
         }
-        console.log(Object.keys(winner).length);
+        console.log(winner,"Winner "+Object.keys(winner).length);
         io.sockets.emit('result',{clam:data.clams,name:row.name})
     })
     socket.emit('game',{status:"running"});
