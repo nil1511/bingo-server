@@ -2,7 +2,6 @@ $(function(){
     var numobj=[];
     var previousNum=[0,0];
     var previousClamable= true;
-    var myname;
     if(navigator.userAgent.search('Chrome')+1){
         $('.card td').css('background','#FC9C21')
         console.log("You are using  chrome");
@@ -49,10 +48,6 @@ $(function(){
     var socket = io.connect('http://127.0.0.1:3000');
     var localnums=[];
     var previousNums=[];
-    socket.on('whoami',function(data){
-        myname=data.name;
-        //console.log(myname,data);
-    })
     var ano=0;
     socket.on('welcome',function(data){
         //console.log(data);

@@ -79,6 +79,9 @@ app.post('/login',function(req,res){
         else{
             console.log("Writing header");
             req.session.user_id=result._id;
+            var name=result.name;
+            if(users.notExist(req.session.user_id))
+                users.AddUser(req.session.user_id,name);
             res.end('1');
         }
     })
@@ -91,8 +94,6 @@ app.get('/logout',function(req,res){
 function checksession(req,res,next){
     if(req.session.user_id){
         //console.log('Inside checksession');
-        if(users.notExist(req.session.user_id))
-            users.AddUser(req.session.user_id);
         next();
     }
     else{
@@ -169,9 +170,6 @@ sessionSockets.on('connection',function(err,socket,session){
         if(new Date()> StartTime){
         socket.emit('welcome',{previousNums:sentNums,code:num,game:gamerunning});
         }
-    })
-    db.findOne({_id: DB.ObjectID(session.user_id)},function(err,row){
-        socket.emit('whoami',{name:row.name})
     })
     socket.on('clicknum',function(data){
         users.clickNum(session.user_id,data.number)

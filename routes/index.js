@@ -8,6 +8,7 @@ exports.index = function(req, res){
 };
 exports.bingo = function(req,res){
     var number=users.getNum(req.session.user_id),clickNum=null;
+    var name = users.getName(req.session.user_id);
     if(number==null){
         number = getBingoCard(1,100,25)
         users.setNum(req.session.user_id,number);
@@ -18,7 +19,7 @@ exports.bingo = function(req,res){
         if(clickNum)
         console.log("length",clickNum.length);
     }
-    res.render('bingo',{page:'bingo',number:number,clicked:clickNum});
+    res.render('bingo',{page:'bingo',number:number,clicked:clickNum,name:name});
 }
 exports.how= function(req,res){
     res.render('howtoplay',{title:'Bingo',page:'how'});
