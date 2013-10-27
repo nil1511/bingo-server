@@ -126,6 +126,7 @@ function ne(){
             seed=true;
             StartTime =new Date(new Date().getTime()+(1*10*1000));
             gamerunning=false;
+            users.clearCard();
             //console.log(numlist,sentNums);
             clearInterval(seeder);
             return;
@@ -192,7 +193,6 @@ function connectionSetup(){
         gamerunning=true;
         prepareNumlist(num,maximum);
         winner={};
-        users.clearCard();
         //console.log(numlist,sentNums);
         seeder= setInterval(ne,ttu*1000);
         console.log("Created Timer");
@@ -205,7 +205,6 @@ function prepareNumlist(num,maximum){
     }
     numlist.splice(num-1,1);
     sentNums.push(num);
-    //users.clearCard();
     return;
 }
 function socketdisconnect(){
