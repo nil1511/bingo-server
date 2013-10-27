@@ -140,7 +140,7 @@ function resultDecleared(){
     seed=true;
     round++;
     users.clearCard();
-    StartTime =new Date(new Date().getTime()+(1*10*1000));
+    StartTime =new Date(new Date().getTime()+(1*60*1000));
     gamerunning=false;
     io.sockets.emit('newgame');
 }
