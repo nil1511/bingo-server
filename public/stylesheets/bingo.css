@@ -116,8 +116,23 @@ width:100%;
 position:absolute;
 bottom:0;
 }
+#result td{
+    width: 100px;
+}
+.clams {
+    width: 120px;
+}
+.card td{
+    width: 65px;
+}
 .amo{
-    padding:0 !important;
-    font-size:small;
+    /*padding:0 !important;*/
+    /*font-size:small;*/
     vertical-align:middle !important;
+}
+.allNum{
+    width:100% !important;
+}
+.allNum td{
+    border:1px solid #000;
 }

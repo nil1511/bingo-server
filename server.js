@@ -109,7 +109,7 @@ var sentNums = [];
 var num=Math.floor(Math.random()*maximum+1);
 var updatetimeStamp=new Date();
 var seed=true;
-var ttu=0.5;//time to update
+var ttu=6;//time to update
 var numlist=[];
 var seeder;
 var winner  = {};
@@ -140,7 +140,7 @@ function resultDecleared(){
     seed=true;
     round++;
     users.clearCard();
-    StartTime =new Date(new Date().getTime()+(1*10*1000));
+    StartTime =new Date(new Date().getTime()+(1*60*1000));
     gamerunning=false;
     io.sockets.emit('newgame');
 }
