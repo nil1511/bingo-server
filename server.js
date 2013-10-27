@@ -140,7 +140,7 @@ function ne(){
 sessionSockets.on('connection',function(err,socket,session){
     //console.log(StartTime,new Date()> StartTime);
     //console.log("Printing session");
-    console.log(users.noOfUsers());
+    console.log("Number of Users Online "+Object.keys(io.connected).length);
     if(typeof session=="undefined"){
         console.log("Session Undefined");
         //users.listuser();

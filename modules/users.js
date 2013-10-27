@@ -40,7 +40,7 @@ exports.listuser = function(){
     console.log(user);
 }
 exports.noOfUsers=function(){
-    console.log("No of users online "+Object.keys(user).length);
+    console.log("No of users in memory "+Object.keys(user).length);
 }
 exports.clickNum=function(id,number,list){
     if(typeof list != "undefined" && list && user[id].clickNums){
