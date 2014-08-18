@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/nil1511/Bingo.png)](https://travis-ci.org/nil1511/Bingo)
+
 **Bingo**
 
 
