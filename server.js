@@ -15,7 +15,7 @@ var connect = require('connect'),
 var app = express()
     ,http = require('http')
 // all environments
-app.set('port', process.env.PORT || 80);
+app.set('port', process.env.PORT || 3000);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 app.use(express.favicon());
@@ -263,4 +263,4 @@ function claming(data,socket,session){
     console.log('Clam ' +data.clams+' has been won');
     //console.log(data,socket,session);
 }
-server.listen(80);
+server.listen(3000);
